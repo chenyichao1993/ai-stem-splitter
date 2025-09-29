@@ -4535,3 +4535,212 @@ _**Assistant**_
 
 ---
 
+_**User (2025-09-29 13:37Z)**_
+
+改吧
+
+---
+
+_**Assistant**_
+
+```thinking
+用户同意了我的修改计划，现在我需要按照刚才说的计划进行修改：
+
+1. FeaturesSection.tsx - 在"Multiple Formats"功能描述中添加MP4
+2. HowItWorksSection.tsx - 在第一步"Upload Audio"的格式说明中添加MP4
+3. FAQSection.tsx - 在FAQ答案中添加MP4支持
+
+让我按顺序进行修改。
+```
+
+好的！我现在按照计划进行修改：
+
+## 1. 修改FeaturesSection.tsx
+
+
+---
+
+Read file: undefined
+
+---
+
+让我找到"Multiple Formats"功能的具体位置：
+
+
+---
+
+
+
+---
+
+Read file: undefined
+
+---
+
+<details><summary>Edit file: components/landing/FeaturesSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -44,5 +44,5 @@
+    {
+      name: 'Multiple Formats',
+-     description: 'Support for MP3, WAV, FLAC, M4A, and AAC files. Download your separated stems in your preferred format.',
++     description: 'Support for MP3, MP4, WAV, FLAC, M4A, and AAC files. Download your separated stems in your preferred format.',
+      icon: Download,
+      color: 'text-indigo-500',
+```
+
+</details>
+
+---
+
+## 2. 修改HowItWorksSection.tsx
+
+
+---
+
+
+
+---
+
+<details><summary>Edit file: components/landing/HowItWorksSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -8,5 +8,5 @@
+      id: 1,
+      name: 'Upload Audio',
+-     description: 'Drag and drop your audio file or click to browse. We support MP3, WAV, FLAC, M4A, and AAC formats up to 50MB.',
++     description: 'Drag and drop your audio file or click to browse. We support MP3, MP4, WAV, FLAC, M4A, and AAC formats up to 50MB.',
+      icon: Upload,
+      color: 'text-blue-600',
+```
+
+</details>
+
+---
+
+## 3. 修改FAQSection.tsx
+
+
+---
+
+
+
+---
+
+<details><summary>Edit file: components/landing/FAQSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -12,5 +12,5 @@
+    {
+      question: 'What audio formats do you support?',
+-     answer: 'We support MP3, WAV, FLAC, M4A, and AAC files. For best results, we recommend using uncompressed formats like WAV or FLAC.',
++     answer: 'We support MP3, MP4, WAV, FLAC, M4A, and AAC files. For best results, we recommend using uncompressed formats like WAV or FLAC.',
+    },
+    {
+```
+
+</details>
+
+---
+
+
+
+---
+
+## 4. 检查是否有linting错误
+
+
+---
+
+
+
+---
+
+## ✅ 修改完成！
+
+我已经成功修改了所有遗漏的地方：
+
+### 📝 修改总结：
+
+1. **FeaturesSection.tsx** ✅
+   - 在"Multiple Formats"功能描述中添加了MP4
+   - 现在显示：`"Support for MP3, MP4, WAV, FLAC, M4A, and AAC files..."`
+
+2. **HowItWorksSection.tsx** ✅
+   - 在第一步"Upload Audio"的格式说明中添加了MP4
+   - 现在显示：`"We support MP3, MP4, WAV, FLAC, M4A, and AAC formats up to 50MB."`
+
+3. **FAQSection.tsx** ✅
+   - 在FAQ答案中添加了MP4支持
+   - 现在显示：`"We support MP3, MP4, WAV, FLAC, M4A, and AAC files..."`
+
+现在整个网站所有提到支持格式的地方都包含了MP4，保持了完全的一致性！🎉
+
+---
+
+_**User (2025-09-29 13:37Z)**_
+
+这两个地方的5应该改为6，理解吗
+
+---
+
+_**Assistant**_
+
+```thinking
+用户指出了两个地方的"5"应该改为"6"。从图片描述中我可以看到：
+
+1. 第一张图 - Hero Section的trial information部分：
+   - 文字显示："No credit card required • 5 free files per month • Cancel anytime"
+   - 这里的"5 free files"应该改为"6 free files"
+
+2. 第二张图 - Pricing Section的Free Plan：
+   - 在Free Plan的features中显示："5 files per month"
+   - 这里的"5 files per month"应该改为"6 files per month"
+
+所以用户希望将免费版本的文件数量限制从5个改为6个，这样更慷慨一些，可能对用户更有吸引力。
+
+我需要找到这两个地方并修改：
+1. Hero Section中的"5 free files per month"
+2. Pricing Section中Free Plan的"5 files per month"
+```
+
+理解了！您希望将免费版本的文件数量限制从5个改为6个，这样更慷慨一些。
+
+## 🔍 需要修改的地方：
+
+### 1. **Hero Section - 试用信息**
+**位置**：`components/landing/HeroSection.tsx`
+**当前文字**：`"No credit card required • 5 free files per month • Cancel anytime"`
+**修改为**：`"No credit card required • 6 free files per month • Cancel anytime"`
+
+### 2. **Pricing Section - Free Plan**
+**位置**：`components/landing/PricingSection.tsx`
+**当前文字**：`"5 files per month"`
+**修改为**：`"6 files per month"`
+
+## 📋 修改计划：
+
+1. **HeroSection.tsx** - 将试用信息中的"5 free files"改为"6 free files"
+2. **PricingSection.tsx** - 将Free Plan中的"5 files per month"改为"6 files per month"
+
+这样免费用户就能获得6个文件/月的处理额度，比之前的5个更慷慨！
+
+您希望我现在就进行这些修改吗？
+
+---
+

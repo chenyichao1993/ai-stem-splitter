@@ -43,7 +43,7 @@ const features = [
   },
   {
     name: 'Multiple Formats',
-    description: 'Support for MP3, WAV, FLAC, M4A, and AAC files. Download your separated stems in your preferred format.',
+    description: 'Support for MP3, MP4, WAV, FLAC, M4A, and AAC files. Download your separated stems in your preferred format.',
     icon: Download,
     color: 'text-indigo-500',
     bgColor: 'bg-indigo-50',

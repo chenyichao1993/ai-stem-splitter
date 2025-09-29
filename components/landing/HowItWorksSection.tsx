@@ -7,7 +7,7 @@ const steps = [
   {
     id: 1,
     name: 'Upload Audio',
-    description: 'Drag and drop your audio file or click to browse. We support MP3, WAV, FLAC, M4A, and AAC formats up to 50MB.',
+    description: 'Drag and drop your audio file or click to browse. We support MP3, MP4, WAV, FLAC, M4A, and AAC formats up to 50MB.',
     icon: Upload,
     color: 'text-blue-600',
     bgColor: 'bg-blue-100',

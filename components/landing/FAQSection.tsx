@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     question: 'What audio formats do you support?',
-    answer: 'We support MP3, WAV, FLAC, M4A, and AAC files. For best results, we recommend using uncompressed formats like WAV or FLAC.',
+    answer: 'We support MP3, MP4, WAV, FLAC, M4A, and AAC files. For best results, we recommend using uncompressed formats like WAV or FLAC.',
   },
   {
     question: 'How long does processing take?',
