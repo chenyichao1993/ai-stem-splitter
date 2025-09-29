@@ -120,9 +120,9 @@ export function HomeStemSplitter() {
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
             AI <span className="text-gradient">Stem Splitter</span>
           </h1>
-          <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium max-w-3xl mx-auto">
-            Professional <strong>audio separation</strong> and <strong>vocal remover</strong> tool. 
-            Extract <strong>instrumental</strong> tracks, isolate vocals, and create perfect stems for music production.
+          <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium max-w-4xl mx-auto">
+            Professional <strong>audio separation</strong> and <strong>vocal remover</strong> tool for music production. 
+            Extract <strong>instrumental</strong> tracks, isolate vocals, and create perfect stems instantly.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-500">
             <span className="px-3 py-1 bg-gray-100 rounded-full">Music Separation</span>
