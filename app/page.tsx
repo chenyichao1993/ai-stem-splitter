@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { HeroSection } from '@/components/landing/HeroSection'
+import { HomeStemSplitter } from '@/components/landing/HomeStemSplitter'
 import { FeaturesSection } from '@/components/landing/FeaturesSection'
 import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
 import { PricingSection } from '@/components/landing/PricingSection'
@@ -41,6 +42,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main>
+        <HomeStemSplitter />
         <HeroSection />
         <FeaturesSection />
         <HowItWorksSection />

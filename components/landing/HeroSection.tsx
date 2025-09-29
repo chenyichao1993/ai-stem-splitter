@@ -9,11 +9,11 @@ export function HeroSection() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
   return (
-    <div className="relative overflow-hidden bg-white">
+    <div className="relative overflow-hidden bg-gray-50">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100" />
       
-      <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
           <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
             <motion.div
@@ -37,13 +37,16 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start"
             >
-              <Link
-                href="/stem-splitter"
+              <button
+                onClick={() => {
+                  const element = document.getElementById('stem-splitter-tool')
+                  element?.scrollIntoView({ behavior: 'smooth' })
+                }}
                 className="btn-primary text-lg px-8 py-3 flex items-center"
               >
-                Start Free Trial
+                Try It Now
                 <Upload className="ml-2 h-5 w-5" />
-              </Link>
+              </button>
               <button
                 onClick={() => setIsVideoPlaying(true)}
                 className="flex items-center text-sm font-semibold leading-6 text-gray-900 hover:text-primary-600 transition-colors"

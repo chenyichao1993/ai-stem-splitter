@@ -3104,3 +3104,507 @@ Lines added: 7, lines removed: 9
 
 ---
 
+_**User (2025-09-29 13:37Z)**_
+
+如图，我希望把这个核心功能直接放在首页的第一屏，这样用户进入我的网站直接就知道网站的核心功能，也可以直接就使用，而不是需要点进另外的页面，先理解我的意思，暂不修改代码
+
+---
+
+_**Assistant**_
+
+```thinking
+用户希望将Stem Splitter的核心功能直接放在首页的第一屏，而不是需要点击进入单独的页面。这是一个很好的用户体验改进建议。
+
+让我理解用户的需求：
+
+1. 当前情况：
+   - 首页是落地页，主要展示产品介绍、功能、价格等
+   - 用户需要点击"Start Free Trial"或导航到"Stem Splitter"页面才能使用核心功能
+   - 这增加了用户的使用步骤
+
+2. 用户希望的效果：
+   - 在首页第一屏直接展示Stem Splitter工具
+   - 用户进入网站就能立即看到和使用核心功能
+   - 减少用户的操作步骤，提高转化率
+
+3. 具体实现思路：
+   - 可以在Hero Section下方直接添加Stem Splitter工具界面
+   - 或者将Hero Section和工具界面结合
+   - 保持首页的营销内容，但让工具更突出
+
+这是一个很好的产品策略，让用户能够"立即体验"而不是"先了解再体验"。
+```
+
+我完全理解您的意思！这是一个非常好的用户体验改进建议。
+
+## 🎯 您的需求分析：
+
+### 当前问题：
+- 用户进入首页看到的是营销内容（功能介绍、价格等）
+- 需要点击"Start Free Trial"才能进入实际工具页面
+- 增加了用户的使用门槛和操作步骤
+
+### 您希望的改进：
+1. **第一屏直接展示核心功能**：用户进入网站立即看到Stem Splitter工具
+2. **降低使用门槛**：无需额外点击，直接可以上传音频文件
+3. **提高转化率**：让用户能够"立即体验"而不是"先了解再体验"
+
+### 具体实现思路：
+- 在首页Hero Section下方直接嵌入Stem Splitter工具界面
+- 保持营销内容，但让工具功能更突出
+- 用户可以在同一页面看到产品介绍并立即使用
+
+## 🎨 布局建议：
+```
+首页第一屏：
+┌─────────────────────────────────────┐
+│ Hero Section (标题 + 简介)           │
+├─────────────────────────────────────┤
+│ Stem Splitter 工具界面               │
+│ [上传区域] [功能说明] [使用提示]      │
+├─────────────────────────────────────┤
+│ 其他营销内容 (功能、价格、评价等)     │
+└─────────────────────────────────────┘
+```
+
+这样用户一进入网站就能：
+1. 了解产品价值
+2. 立即体验核心功能
+3. 如果需要更多信息再往下浏览
+
+您希望我现在就实现这个改进吗？
+
+---
+
+_**User (2025-09-29 13:37Z)**_
+
+你先改吧
+
+---
+
+_**Assistant**_
+
+```thinking
+用户希望我将Stem Splitter工具直接集成到首页的第一屏。我需要：
+
+1. 修改首页（app/page.tsx），在Hero Section下方添加Stem Splitter工具
+2. 可能需要调整Hero Section的高度，为工具留出空间
+3. 确保工具界面在首页上能正常工作
+4. 保持响应式设计
+
+让我先查看当前的首页结构，然后进行修改。
+```
+
+好的！我来将Stem Splitter工具直接集成到首页第一屏。
+
+
+---
+
+Read file: undefined
+
+---
+
+现在我需要创建一个简化版的Stem Splitter组件，专门用于首页展示。让我先创建这个组件：
+
+
+---
+
+
+
+---
+
+现在我需要修改首页，在Hero Section下方添加这个工具组件：
+
+
+---
+
+<details><summary>Edit file: app/page.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: undefined
+
+```diff
+@@ -1,4 +1,5 @@
+  import { Metadata } from 'next'
+  import { HeroSection } from '@/components/landing/HeroSection'
++ import { HomeStemSplitter } from '@/components/landing/HomeStemSplitter'
+  import { FeaturesSection } from '@/components/landing/FeaturesSection'
+  import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: app/page.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: undefined
+
+```diff
+@@ -44,4 +44,5 @@
+        <main>
+          <HeroSection />
++         <HomeStemSplitter />
+          <FeaturesSection />
+          <HowItWorksSection />
+```
+
+</details>
+
+---
+
+现在我需要调整Hero Section，让它更紧凑一些，为工具留出更多空间。让我修改Hero Section：
+
+
+---
+
+Read file: undefined
+
+---
+
+让我调整Hero Section的padding，让它更紧凑：
+
+
+---
+
+<details><summary>Edit file: components/landing/HeroSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -14,5 +14,5 @@
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50" />
+        
+-       <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
++       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+            <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
+```
+
+</details>
+
+---
+
+现在让我也调整一下Hero Section中按钮的链接，让它滚动到工具部分而不是跳转到新页面：
+
+
+---
+
+<details><summary>Edit file: components/landing/HeroSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 6, lines removed: 3
+
+```diff
+@@ -38,11 +38,14 @@
+                className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start"
+              >
+-               <Link
+-                 href="/stem-splitter"
++               <button
++                 onClick={() => {
++                   const element = document.getElementById('stem-splitter-tool')
++                   element?.scrollIntoView({ behavior: 'smooth' })
++                 }}
+                  className="btn-primary text-lg px-8 py-3 flex items-center"
+                >
+                  Start Free Trial
+                  <Upload className="ml-2 h-5 w-5" />
+-               </Link>
++               </button>
+                <button
+                  onClick={() => setIsVideoPlaying(true)}
+```
+
+</details>
+
+---
+
+现在我需要给HomeStemSplitter组件添加一个ID，以便按钮可以滚动到它：
+
+
+---
+
+<details><summary>Edit file: components/landing/HomeStemSplitter.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -115,5 +115,5 @@
+  
+    return (
+-     <div className="py-16 bg-gray-50">
++     <div id="stem-splitter-tool" className="py-16 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+```
+
+</details>
+
+---
+
+完成！我已经成功将Stem Splitter工具集成到首页第一屏。
+
+## ✅ 修改完成：
+
+### 1. **创建了专门的首页工具组件**
+- `HomeStemSplitter.tsx` - 专门为首页设计的工具界面
+- 保持了完整的功能：文件上传、处理、结果展示
+
+### 2. **调整了页面布局**
+- Hero Section更紧凑（减少了padding）
+- 在Hero Section下方直接添加了工具界面
+- 保持了所有营销内容
+
+### 3. **优化了用户体验**
+- "Start Free Trial"按钮现在会平滑滚动到工具部分
+- 用户无需跳转页面，在同一页面就能体验功能
+- 工具界面有独立的标题"Try It Now"
+
+### 4. **页面结构现在是**：
+```
+首页布局：
+┌─────────────────────────────────────┐
+│ Header (导航栏)                      │
+├─────────────────────────────────────┤
+│ Hero Section (标题 + 简介 + 按钮)     │
+├─────────────────────────────────────┤
+│ Stem Splitter 工具界面 (Try It Now)  │
+├─────────────────────────────────────┤
+│ Features Section                    │
+├─────────────────────────────────────┤
+│ How It Works Section                │
+├─────────────────────────────────────┤
+│ Pricing Section                     │
+├─────────────────────────────────────┤
+│ Testimonials Section                │
+├─────────────────────────────────────┤
+│ FAQ Section                         │
+├─────────────────────────────────────┤
+│ CTA Section                         │
+├─────────────────────────────────────┤
+│ Footer                              │
+└─────────────────────────────────────┘
+```
+
+现在用户进入首页就能：
+1. 看到产品介绍和价值主张
+2. 立即体验核心功能
+3. 如果需要更多信息再往下浏览
+
+刷新页面查看效果吧！🎉
+
+---
+
+_**User (2025-09-29 13:37Z)**_
+
+不对，我是要工具部分在第一屏，也就是导航栏下面就是它，再下面才是hero section和其他，也就是说工具部分和hero section位置互换，重新理解下
+
+---
+
+_**Assistant**_
+
+```thinking
+啊，我理解错了！用户希望的是：
+
+1. 导航栏下面直接就是Stem Splitter工具界面
+2. 工具界面下面才是Hero Section（标题、简介等营销内容）
+3. 然后是其他内容
+
+也就是说，用户希望工具功能放在最前面，让用户一进入网站就能立即使用，而不是先看营销内容。
+
+这样的布局是：
+```
+首页布局：
+┌─────────────────────────────────────┐
+│ Header (导航栏)                      │
+├─────────────────────────────────────┤
+│ Stem Splitter 工具界面 (第一屏)       │
+├─────────────────────────────────────┤
+│ Hero Section (标题 + 简介)           │
+├─────────────────────────────────────┤
+│ Features Section                    │
+├─────────────────────────────────────┤
+│ 其他内容...                         │
+└─────────────────────────────────────┘
+```
+
+这样用户一进入网站就能立即看到和使用核心功能，体验更好。
+```
+
+啊！我理解错了！您希望工具部分在第一屏，也就是导航栏下面直接就是Stem Splitter工具，然后才是Hero Section。让我重新调整：
+
+
+---
+
+<details><summary>Edit file: app/page.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -43,6 +43,6 @@
+        <Header />
+        <main>
+-         <HeroSection />
+          <HomeStemSplitter />
++         <HeroSection />
+          <FeaturesSection />
+          <HowItWorksSection />
+```
+
+</details>
+
+---
+
+现在我需要调整HomeStemSplitter的样式，让它更适合作为第一屏：
+
+
+---
+
+<details><summary>Edit file: components/landing/HomeStemSplitter.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -115,5 +115,5 @@
+  
+    return (
+-     <div id="stem-splitter-tool" className="py-16 bg-gray-50">
++     <div id="stem-splitter-tool" className="py-20 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+```
+
+</details>
+
+---
+
+现在我需要调整Hero Section的按钮，让它滚动到工具部分（虽然现在工具在上面，但保持一致性）：
+
+
+---
+
+<details><summary>Edit file: components/landing/HeroSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -45,5 +45,5 @@
+                  className="btn-primary text-lg px-8 py-3 flex items-center"
+                >
+-                 Start Free Trial
++                 Try It Now
+                  <Upload className="ml-2 h-5 w-5" />
+                </button>
+```
+
+</details>
+
+---
+
+现在让我调整Hero Section的背景，让它与工具部分有更好的视觉分离：
+
+
+---
+
+<details><summary>Edit file: components/landing/HeroSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 2, lines removed: 2
+
+```diff
+@@ -10,7 +10,7 @@
+  
+    return (
+-     <div className="relative overflow-hidden bg-white">
++     <div className="relative overflow-hidden bg-gray-50">
+        {/* Background gradient */}
+-       <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50" />
++       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100" />
+        
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+```
+
+</details>
+
+---
+
+完成！现在页面布局已经按照您的要求调整了：
+
+## ✅ 修改完成：
+
+### 1. **页面布局调整**
+现在的页面结构是：
+```
+首页布局：
+┌─────────────────────────────────────┐
+│ Header (导航栏)                      │
+├─────────────────────────────────────┤
+│ Stem Splitter 工具界面 (第一屏)       │ ← 用户一进入就能看到
+├─────────────────────────────────────┤
+│ Hero Section (标题 + 简介)           │ ← 营销内容
+├─────────────────────────────────────┤
+│ Features Section                    │
+├─────────────────────────────────────┤
+│ 其他内容...                         │
+└─────────────────────────────────────┘
+```
+
+### 2. **样式优化**
+- 工具部分使用白色背景，作为第一屏更突出
+- Hero Section使用灰色背景，与工具部分形成视觉分离
+- 保持了所有功能和交互
+
+### 3. **用户体验**
+- 用户一进入网站就能立即看到和使用核心功能
+- 无需滚动或点击就能体验产品
+- 营销内容在工具下方，用户可以先体验再了解
+
+现在用户进入网站的第一眼就能看到Stem Splitter工具，可以立即上传音频文件进行体验！🎉
+
+刷新页面查看新的布局效果吧！
+
+---
+
+_**User**_
+
+stem splitter
+Stem Separation tool
+Music separation
+Music Splitter
+Voice Separation
+video vocal remover
+vocal remover and isolation
+vocal remover online
+instrumental remover online
+instrumental separator
+Audio Separation by Artificial Intelligence
+
+如图， 我圈出来的内容不太好，工具部分是在首页第一屏，用户进入我的网站，第一眼就看到这个部分，应该让用户知道我的网站核心功能，用户一看就知道我的网站能满足他的需求，所以这里是需要优化的，以上是用户经常用的谷歌搜索关键词，你可以使用它们，对我圈出来的内容进行优化，最核心的关键词是stem splitter，修改要包括内容和样式，seo优化和用户体验友好，先完整理解我的要求，暂不修改
+
+---
+
