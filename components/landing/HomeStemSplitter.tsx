@@ -117,12 +117,22 @@ export function HomeStemSplitter() {
     <div id="stem-splitter-tool" className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            Try It Now
-          </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Experience the power of AI audio separation
+          <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+            AI <span className="text-gradient">Stem Splitter</span>
+          </h1>
+          <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium">
+            Separate vocals, drums, bass, guitar from any song instantly
           </p>
+          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+            Professional <strong>audio separation</strong> and <strong>vocal remover</strong> tool. 
+            Extract <strong>instrumental</strong> tracks, isolate vocals, and create perfect stems for music production.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-500">
+            <span className="px-3 py-1 bg-gray-100 rounded-full">Music Separation</span>
+            <span className="px-3 py-1 bg-gray-100 rounded-full">Vocal Remover Online</span>
+            <span className="px-3 py-1 bg-gray-100 rounded-full">Instrumental Separator</span>
+            <span className="px-3 py-1 bg-gray-100 rounded-full">AI Audio Processing</span>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -130,7 +140,7 @@ export function HomeStemSplitter() {
           <div className="lg:col-span-2">
             <div className="card">
               <h3 className="text-xl font-semibold text-gray-900 mb-6">
-                Upload Audio File
+                Upload Your Song - Get Separated Stems
               </h3>
               
               {!uploadedFile ? (
@@ -145,14 +155,14 @@ export function HomeStemSplitter() {
                   <input {...getInputProps()} />
                   <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                   {isDragActive ? (
-                    <p className="text-lg text-primary-600">Drop the file here...</p>
+                    <p className="text-lg text-primary-600">Drop your song here to separate stems...</p>
                   ) : (
                     <div>
                       <p className="text-lg text-gray-600 mb-2">
-                        Drag and drop your audio file here, or click to browse
+                        Drop your song here to extract vocals, drums, bass & guitar
                       </p>
                       <p className="text-sm text-gray-500">
-                        Supports MP3, WAV, FLAC, M4A, AAC (max 50MB)
+                        Supports MP3, WAV, FLAC, M4A, AAC • Max 50MB • Free to use
                       </p>
                     </div>
                   )}
@@ -186,7 +196,7 @@ export function HomeStemSplitter() {
                       className="w-full btn-primary text-lg py-4"
                     >
                       <Music className="mr-2 h-5 w-5" />
-                      Separate Audio Stems
+                      Separate Stems Now - Free
                     </button>
                   )}
 
@@ -212,7 +222,7 @@ export function HomeStemSplitter() {
             {/* Features */}
             <div className="card">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                What you&apos;ll get
+                Separated Audio Stems
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center">
@@ -241,13 +251,13 @@ export function HomeStemSplitter() {
             {/* Tips */}
             <div className="card">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Tips for best results
+                Perfect for
               </h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Use high-quality source audio</li>
-                <li>• Avoid heavily compressed files</li>
-                <li>• Ensure clear instrument separation</li>
-                <li>• Process one song at a time</li>
+                <li>• <strong>Music Producers</strong> - Create remixes & samples</li>
+                <li>• <strong>DJs</strong> - Extract vocals for live sets</li>
+                <li>• <strong>Content Creators</strong> - Remove vocals for videos</li>
+                <li>• <strong>Musicians</strong> - Practice with instrumentals</li>
               </ul>
             </div>
 
