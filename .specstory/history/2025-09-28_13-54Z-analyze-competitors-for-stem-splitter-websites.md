@@ -4905,3 +4905,159 @@ Lines added: 1, lines removed: 1
 
 ---
 
+_**User (2025-09-29 13:37Z)**_
+
+增加点击回到页面顶部按钮
+
+---
+
+_**Assistant**_
+
+```thinking
+用户希望增加一个点击回到页面顶部的按钮。这是一个常见的UI功能，通常是一个固定在页面右下角的浮动按钮，当用户滚动到页面下方时显示，点击后可以平滑滚动回到页面顶部。
+
+我需要：
+1. 创建一个BackToTop组件
+2. 在适当的位置添加这个组件（通常在layout.tsx或者主要页面中）
+3. 实现滚动检测逻辑，当页面滚动超过一定距离时显示按钮
+4. 实现点击后平滑滚动到顶部的功能
+5. 添加合适的样式和动画效果
+
+让我先创建一个BackToTop组件，然后在layout中添加它。
+```
+
+好的！我来为您添加一个点击回到页面顶部的按钮。这是一个很实用的功能，特别是对于长页面。
+
+## 🚀 创建BackToTop组件
+
+
+---
+
+
+
+---
+
+## 📱 添加响应式样式优化
+
+让我优化一下移动端的显示效果：
+
+
+---
+
+<details><summary>Edit file: components/ui/BackToTop.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -45,5 +45,5 @@
+            transition={{ duration: 0.2 }}
+            onClick={scrollToTop}
+-           className="fixed bottom-8 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg transition-all duration-200 hover:bg-indigo-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
++           className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg transition-all duration-200 hover:bg-indigo-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            aria-label="回到页面顶部"
+          >
+```
+
+</details>
+
+---
+
+## 🏠 在根布局中添加BackToTop组件
+
+
+---
+
+Read file: undefined
+
+---
+
+<details><summary>Edit file: app/layout.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: undefined
+
+```diff
+@@ -3,4 +3,5 @@
+  import { Providers } from './providers'
+  import { Toaster } from 'react-hot-toast'
++ import { BackToTop } from '@/components/ui/BackToTop'
+  
+  export const metadata: Metadata = {
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: app/layout.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: undefined
+
+```diff
+@@ -73,4 +73,5 @@
+          <Providers>
+            {children}
++           <BackToTop />
+            <Toaster
+              position="top-right"
+```
+
+</details>
+
+---
+
+## 🔍 检查是否有linting错误
+
+
+---
+
+
+
+---
+
+## ✅ 回到顶部按钮添加完成！
+
+### 🎯 **功能特点**：
+
+1. **智能显示** 📱
+   - 当页面滚动超过300px时自动显示
+   - 页面在顶部时自动隐藏
+
+2. **平滑动画** ✨
+   - 使用Framer Motion实现淡入淡出效果
+   - 按钮出现/消失有缩放动画
+
+3. **响应式设计** 📱
+   - 移动端：距离底部和右侧6个单位
+   - 桌面端：距离底部和右侧8个单位
+
+4. **无障碍访问** ♿
+   - 包含`aria-label`属性
+   - 支持键盘焦点和焦点环
+
+5. **视觉设计** 🎨
+   - 靛蓝色圆形按钮
+   - 悬停时颜色变深
+   - 阴影效果增强视觉层次
+
+6. **平滑滚动** 🚀
+   - 点击后平滑滚动到页面顶部
+   - 使用原生`scrollTo`API的`behavior: 'smooth'`
+
+### 📍 **位置**：
+- 固定在页面右下角
+- 在所有页面都会显示（因为添加在根布局中）
+- 不会遮挡重要内容
+
+现在用户在任何页面滚动时都能看到这个回到顶部的按钮，点击后可以平滑滚动回到页面顶部！🎉
+
+---
+

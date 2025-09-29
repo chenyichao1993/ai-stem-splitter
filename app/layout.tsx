@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
+import { BackToTop } from '@/components/ui/BackToTop'
 
 export const metadata: Metadata = {
   title: {
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body className="h-full bg-gray-50 font-sans">
         <Providers>
           {children}
+          <BackToTop />
           <Toaster
             position="top-right"
             toastOptions={{
