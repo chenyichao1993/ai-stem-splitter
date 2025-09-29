@@ -53,7 +53,7 @@ export function HomeStemSplitter() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'audio/*': ['.mp3', '.wav', '.flac', '.m4a', '.aac']
+      'audio/*': ['.mp3', '.mp4', '.wav', '.flac', '.m4a', '.aac']
     },
     multiple: false,
     maxSize: 50 * 1024 * 1024 // 50MB
@@ -152,14 +152,14 @@ export function HomeStemSplitter() {
                   <input {...getInputProps()} />
                   <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                   {isDragActive ? (
-                    <p className="text-lg text-primary-600">Drop your song here to separate stems...</p>
+                    <p className="text-lg text-primary-600">Drop your audio file here...</p>
                   ) : (
                     <div>
                       <p className="text-lg text-gray-600 mb-2">
-                        Drop your song here to extract vocals, drums, bass & guitar
+                        Drag and drop your audio file here, or click to browse
                       </p>
                       <p className="text-sm text-gray-500">
-                        Supports MP3, WAV, FLAC, M4A, AAC • Max 50MB • Free to use
+                        Supports MP3, MP4, WAV, FLAC, M4A, AAC (max 50MB)
                       </p>
                     </div>
                   )}

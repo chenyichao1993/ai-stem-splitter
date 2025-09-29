@@ -1,5 +1,6 @@
 export const SUPPORTED_AUDIO_FORMATS = [
   'audio/mpeg',
+  'audio/mp4',
   'audio/wav',
   'audio/flac',
   'audio/mp4',

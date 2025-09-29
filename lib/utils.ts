@@ -39,13 +39,13 @@ export function generateId(): string {
 }
 
 export function validateAudioFile(file: File): { valid: boolean; error?: string } {
-  const allowedTypes = ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/mp4', 'audio/aac']
+  const allowedTypes = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/flac', 'audio/mp4', 'audio/aac']
   const maxSize = 50 * 1024 * 1024 // 50MB for free users
   
   if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
-      error: 'Unsupported file format. Please upload MP3, WAV, FLAC, M4A, or AAC files.'
+      error: 'Unsupported file format. Please upload MP3, MP4, WAV, FLAC, M4A, or AAC files.'
     }
   }
   
