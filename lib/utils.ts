@@ -39,7 +39,7 @@ export function generateId(): string {
 }
 
 export function validateAudioFile(file: File): { valid: boolean; error?: string } {
-  const allowedTypes = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/flac', 'audio/mp4', 'audio/aac']
+  const allowedTypes = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/flac', 'audio/m4a', 'audio/aac']
   const maxSize = 50 * 1024 * 1024 // 50MB for free users
   
   if (!allowedTypes.includes(file.type)) {

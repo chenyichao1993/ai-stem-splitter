@@ -3,7 +3,7 @@ export const SUPPORTED_AUDIO_FORMATS = [
   'audio/mp4',
   'audio/wav',
   'audio/flac',
-  'audio/mp4',
+  'audio/m4a',
   'audio/aac',
 ]
 
