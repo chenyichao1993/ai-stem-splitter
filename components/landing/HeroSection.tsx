@@ -39,10 +39,10 @@ export function HeroSection() {
             >
               <Link
                 href="/stem-splitter"
-                className="btn-primary text-lg px-8 py-4"
+                className="btn-primary text-lg px-8 py-3 flex items-center"
               >
-                <Upload className="mr-2 h-5 w-5" />
                 Start Free Trial
+                <Upload className="ml-2 h-5 w-5" />
               </Link>
               <button
                 onClick={() => setIsVideoPlaying(true)}
