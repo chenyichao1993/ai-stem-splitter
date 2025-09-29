@@ -120,10 +120,7 @@ export function HomeStemSplitter() {
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
             AI <span className="text-gradient">Stem Splitter</span>
           </h1>
-          <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium">
-            Separate vocals, drums, bass, guitar from any song instantly
-          </p>
-          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium max-w-3xl mx-auto">
             Professional <strong>audio separation</strong> and <strong>vocal remover</strong> tool. 
             Extract <strong>instrumental</strong> tracks, isolate vocals, and create perfect stems for music production.
           </p>
@@ -140,7 +137,7 @@ export function HomeStemSplitter() {
           <div className="lg:col-span-2">
             <div className="card">
               <h3 className="text-xl font-semibold text-gray-900 mb-6">
-                Upload Your Song - Get Separated Stems
+                Upload Audio File - Get Separated Stems
               </h3>
               
               {!uploadedFile ? (

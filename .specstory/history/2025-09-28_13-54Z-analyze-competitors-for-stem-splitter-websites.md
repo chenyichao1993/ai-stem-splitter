@@ -3972,3 +3972,95 @@ Lines added: 5, lines removed: 5
 
 ---
 
+_**User (2025-09-29 13:37Z)**_
+
+Separate vocals, drums, bass, guitar from any song instantly这句话不要；
+
+Professional audio separation and vocal remover tool. Extract instrumental tracks, isolate vocals, and create perfect stems for music production.这两句的字体大小改为跟Separate vocals, drums, bass, guitar from any song instantly这句话一样；
+
+Upload Your Song - Get Separated Stems改为Upload Audio File - Get Separated Stems；
+
+
+
+
+---
+
+_**Assistant**_
+
+```thinking
+用户要求：
+1. 删除"Separate vocals, drums, bass, guitar from any song instantly"这句话
+2. 将"Professional audio separation and vocal remover tool. Extract instrumental tracks, isolate vocals, and create perfect stems for music production."这两句话的字体大小改为跟被删除的那句话一样大
+3. 将"Upload Your Song - Get Separated Stems"改为"Upload Audio File - Get Separated Stems"
+
+我需要修改HomeStemSplitter.tsx文件中的相应部分。
+```
+
+好的！我来按照您的要求进行修改：
+
+
+---
+
+<details><summary>Edit file: components/landing/HomeStemSplitter.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 4
+
+```diff
+@@ -121,8 +121,5 @@
+              AI <span className="text-gradient">Stem Splitter</span>
+            </h1>
+-           <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium">
+-             Separate vocals, drums, bass, guitar from any song instantly
+-           </p>
+-           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
++           <p className="mt-6 text-xl text-gray-700 sm:text-2xl font-medium max-w-3xl mx-auto">
+              Professional <strong>audio separation</strong> and <strong>vocal remover</strong> tool. 
+              Extract <strong>instrumental</strong> tracks, isolate vocals, and create perfect stems for music production.
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: components/landing/HomeStemSplitter.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -138,5 +138,5 @@
+              <div className="card">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">
+-                 Upload Your Song - Get Separated Stems
++                 Upload Audio File - Get Separated Stems
+                </h3>
+                
+```
+
+</details>
+
+---
+
+完成！我已经按照您的要求进行了修改：
+
+## ✅ 修改完成：
+
+### 1. **删除了指定句子**
+- 移除了"Separate vocals, drums, bass, guitar from any song instantly"
+
+### 2. **调整了字体大小**
+- 将"Professional audio separation and vocal remover tool. Extract instrumental tracks, isolate vocals, and create perfect stems for music production."的字体大小改为与之前删除的句子一样大
+- 使用`text-xl sm:text-2xl font-medium`样式
+
+### 3. **修改了上传区域标题**
+- 将"Upload Your Song - Get Separated Stems"改为"Upload Audio File - Get Separated Stems"
+
+现在页面布局更加简洁，重点突出了专业工具的描述，字体大小也更加协调。刷新页面查看效果！🎉
+
+---
+
