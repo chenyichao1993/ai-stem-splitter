@@ -59,7 +59,6 @@ const plans = [
       'All stem types',
       'Lossless quality output',
       'API access',
-      'Usage analytics',
       'Dedicated support',
       '30-day file retention',
       'Custom integrations',
