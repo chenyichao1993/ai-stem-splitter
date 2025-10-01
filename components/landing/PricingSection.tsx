@@ -37,7 +37,6 @@ const plans = [
       'Multi-stem separation (vocals, drums, bass, guitar, piano)',
       'High quality output',
       'Priority processing',
-      'Priority support',
       '7-day file retention',
       'Batch processing',
       'No watermarks',
@@ -181,7 +180,7 @@ export function PricingSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className={`relative rounded-2xl border p-8 ${
+              className={`relative rounded-2xl border p-6 ${
                 plan.popular
                   ? 'border-primary-600 bg-white shadow-xl'
                   : 'border-gray-200 bg-white'
@@ -215,7 +214,7 @@ export function PricingSection() {
                 </p>
               </div>
               
-              <ul className="mt-8 space-y-3">
+              <ul className="mt-8 space-y-2">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start">
                     <Check className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
