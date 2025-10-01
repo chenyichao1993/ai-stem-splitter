@@ -64,8 +64,8 @@ const plans = [
       'Team management',
     ],
     limitations: [],
-    cta: 'Contact Sales',
-    href: '/contact?plan=enterprise',
+    cta: 'Start Enterprise Trial',
+    href: '/pricing?plan=enterprise',
     popular: false,
   },
 ]
