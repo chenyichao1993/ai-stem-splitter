@@ -35,9 +35,8 @@ export function CTASection() {
               href="/stem-splitter"
               className="flex items-center rounded-lg bg-white px-6 py-3 text-base font-semibold text-primary-600 shadow-sm hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
             >
-              <Upload className="mr-2 h-5 w-5" />
               Start Free Trial
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
               href="/pricing"
