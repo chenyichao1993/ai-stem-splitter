@@ -15529,3 +15529,128 @@ HomeStemSplitter → HeroSection → InteractiveDemoSection → FeaturesSection
 
 ---
 
+_**User (2025-09-30 15:01Z)**_
+
+圈出来的不要，删了；Try our interactive demo to see how precisely you can extract individual instrument tracks from any song. Switch between Free and Premium plans to compare features.这句话的字体尽量调小些
+
+---
+
+_**Assistant**_
+
+```thinking
+用户想要删除圈出来的部分，从图片描述来看，用户圈出的是功能对比部分（Free Plan和Premium Plan的两个框）。同时用户希望将描述文字的字体调小一些。
+
+我需要：
+1. 删除功能对比部分（两个计划对比的框）
+2. 将描述文字的字体调小
+
+让我修改InteractiveDemoSection.tsx文件。
+```
+
+好的，我来删除功能对比部分，并调小描述文字的字体。
+
+
+---
+
+<details><summary>Edit file: components/interactive-demo/InteractiveDemoSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: undefined, lines removed: 30
+
+```diff
+@@ -180,34 +180,4 @@
+          {/* 计划切换 */}
+          <PlanToggle planType={planType} onPlanChange={handlePlanChange} />
+- 
+-         {/* 功能对比 */}
+-         <div className="mb-8">
+-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+-             <div className={`p-4 rounded-lg border-2 transition-all ${
+-               planType === 'free' 
+-                 ? 'border-blue-500 bg-blue-500/10' 
+-                 : 'border-gray-600 bg-gray-800'
+-             }`}>
+-               <h3 className="text-lg font-semibold text-white mb-2">Free Plan</h3>
+-               <ul className="text-gray-300 space-y-1">
+-                 <li>• Vocals + Instrumental separation</li>
+-                 <li>• Basic audio quality</li>
+-                 <li>• Standard processing speed</li>
+-               </ul>
+-             </div>
+-             <div className={`p-4 rounded-lg border-2 transition-all ${
+-               planType === 'premium' 
+-                 ? 'border-blue-500 bg-blue-500/10' 
+-                 : 'border-gray-600 bg-gray-800'
+-             }`}>
+-               <h3 className="text-lg font-semibold text-white mb-2">Premium Plan</h3>
+-               <ul className="text-gray-300 space-y-1">
+-                 <li>• 6-track separation (Vocals, Drums, Bass, Guitar, Piano, Other)</li>
+-                 <li>• High-quality audio output</li>
+-                 <li>• Advanced processing algorithms</li>
+-               </ul>
+-             </div>
+-           </div>
+-         </div>
+  
+          {/* 音频界面 */}
+```
+
+</details>
+
+---
+
+现在调小描述文字的字体：
+
+
+---
+
+<details><summary>Edit file: components/interactive-demo/InteractiveDemoSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -172,5 +172,5 @@
+              Experience Our AI Stem Separation
+            </h2>
+-           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
++           <p className="text-base text-gray-300 max-w-3xl mx-auto">
+              Try our interactive demo to see how precisely you can extract individual instrument tracks from any song. 
+              Switch between Free and Premium plans to compare features.
+```
+
+</details>
+
+---
+
+
+
+---
+
+## ✅ **修改完成！**
+
+我已经按照您的要求完成了以下修改：
+
+### 🗑️ **删除的内容**：
+- ✅ 删除了功能对比部分（Free Plan和Premium Plan的两个对比框）
+- ✅ 移除了计划功能列表展示
+
+### 📝 **字体调整**：
+- ✅ 将描述文字从 `text-xl` 改为 `text-base`，字体变小了
+
+### 🎯 **现在的界面结构**：
+```
+1. 标题: "Experience Our AI Stem Separation"
+2. 描述文字: (字体已调小)
+3. 计划切换按钮: Free Plan / Premium Plan
+4. 音频界面: 直接显示交互式演示
+```
+
+现在界面更加简洁，用户可以直接通过切换按钮和音频界面来体验不同计划的功能差异，而不需要额外的功能对比框。描述文字也更加合适，不会过于突出。
+
+---
+

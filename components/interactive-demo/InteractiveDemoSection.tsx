@@ -171,7 +171,7 @@ export function InteractiveDemoSection() {
           <h2 className="text-4xl font-bold text-white mb-4">
             Experience Our AI Stem Separation
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-base text-gray-300 max-w-3xl mx-auto">
             Try our interactive demo to see how precisely you can extract individual instrument tracks from any song. 
             Switch between Free and Premium plans to compare features.
           </p>
@@ -179,36 +179,6 @@ export function InteractiveDemoSection() {
 
         {/* 计划切换 */}
         <PlanToggle planType={planType} onPlanChange={handlePlanChange} />
-
-        {/* 功能对比 */}
-        <div className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div className={`p-4 rounded-lg border-2 transition-all ${
-              planType === 'free' 
-                ? 'border-blue-500 bg-blue-500/10' 
-                : 'border-gray-600 bg-gray-800'
-            }`}>
-              <h3 className="text-lg font-semibold text-white mb-2">Free Plan</h3>
-              <ul className="text-gray-300 space-y-1">
-                <li>• Vocals + Instrumental separation</li>
-                <li>• Basic audio quality</li>
-                <li>• Standard processing speed</li>
-              </ul>
-            </div>
-            <div className={`p-4 rounded-lg border-2 transition-all ${
-              planType === 'premium' 
-                ? 'border-blue-500 bg-blue-500/10' 
-                : 'border-gray-600 bg-gray-800'
-            }`}>
-              <h3 className="text-lg font-semibold text-white mb-2">Premium Plan</h3>
-              <ul className="text-gray-300 space-y-1">
-                <li>• 6-track separation (Vocals, Drums, Bass, Guitar, Piano, Other)</li>
-                <li>• High-quality audio output</li>
-                <li>• Advanced processing algorithms</li>
-              </ul>
-            </div>
-          </div>
-        </div>
 
         {/* 音频界面 */}
         <div className="bg-gray-800 rounded-lg overflow-hidden shadow-2xl">
