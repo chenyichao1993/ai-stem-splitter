@@ -39,7 +39,7 @@ const navigation = {
     },
     {
       name: 'Email',
-      href: 'mailto:hello@aistemsplitter.com',
+      href: 'mailto:motionjoy93@gmail.com',
       icon: Mail,
     },
   ],
