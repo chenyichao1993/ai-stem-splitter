@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Upload, Zap, ArrowRight } from 'lucide-react'
+import { Upload, Zap, ArrowRight, Award } from 'lucide-react'
 
 export function CTASection() {
   return (
@@ -81,7 +81,7 @@ export function CTASection() {
             <div className="text-center">
               <div className="flex justify-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
-                  <Zap className="h-6 w-6 text-white" />
+                  <Award className="h-6 w-6 text-white" />
                 </div>
               </div>
               <h3 className="mt-4 text-lg font-semibold text-white">High Quality</h3>
