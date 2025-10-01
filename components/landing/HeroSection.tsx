@@ -100,7 +100,13 @@ export function HeroSection() {
                 </div>
                 
                 {/* Upload area */}
-                <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+                <div 
+                  className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-gray-500 transition-colors"
+                  onClick={() => {
+                    const element = document.getElementById('stem-splitter-tool')
+                    element?.scrollIntoView({ behavior: 'smooth' })
+                  }}
+                >
                   <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                   <p className="text-gray-300 mb-2">Drop your audio file here</p>
                   <p className="text-sm text-gray-500">MP3, WAV, FLAC, M4A supported</p>
