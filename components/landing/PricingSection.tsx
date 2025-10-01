@@ -109,11 +109,32 @@ export function PricingSection() {
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Choose the perfect plan for your needs
             </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Start free and upgrade as you grow. All plans include our core AI separation technology.
-            </p>
           </motion.div>
         </div>
+        
+        {/* Trust signals */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="mt-12 flex justify-center"
+        >
+          <div className="flex items-center space-x-6 text-sm text-gray-600">
+            <div className="flex items-center">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 mr-2">
+                <span className="text-green-600 font-semibold">✓</span>
+              </div>
+              <span>20 minutes free trial of all features</span>
+            </div>
+            <div className="flex items-center">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 mr-2">
+                <span className="text-blue-600 font-semibold">🛡️</span>
+              </div>
+              <span>30-day money-back guarantee</span>
+            </div>
+          </div>
+        </motion.div>
         
         {/* Billing toggle */}
         <motion.div
@@ -121,7 +142,7 @@ export function PricingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="mt-16 flex justify-center"
+          className="mt-8 flex justify-center"
         >
           <div className="flex items-center space-x-4">
             <span 
