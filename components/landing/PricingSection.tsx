@@ -47,7 +47,7 @@ const plans = [
   },
   {
     name: 'Enterprise',
-    price: 99,
+    price: 59,
     description: 'For teams and organizations',
     features: [
       'Everything in Pro',
@@ -69,6 +69,25 @@ const plans = [
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(false)
+
+  const getAnnualPrice = (planName: string) => {
+    if (planName === 'Pro') return 180
+    if (planName === 'Enterprise') return 564
+    return 0
+  }
+
+  const getMonthlyEquivalent = (planName: string) => {
+    if (planName === 'Pro') return 15
+    if (planName === 'Enterprise') return 47
+    return 0
+  }
+
+  const getSavings = (plan: any) => {
+    if (plan.price === 0) return 0
+    const originalAnnualPrice = plan.price * 12
+    const discountedAnnualPrice = getAnnualPrice(plan.name)
+    return originalAnnualPrice - discountedAnnualPrice
+  }
 
   return (
     <div className="py-24 sm:py-32 bg-gray-50">
@@ -101,7 +120,10 @@ export function PricingSection() {
           className="mt-16 flex justify-center"
         >
           <div className="flex items-center space-x-4">
-            <span className={`text-sm font-medium ${!isAnnual ? 'text-gray-900' : 'text-gray-500'}`}>
+            <span 
+              onClick={() => setIsAnnual(false)}
+              className={`text-sm font-medium cursor-pointer transition-colors ${!isAnnual ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+            >
               Monthly
             </span>
             <button
@@ -114,14 +136,15 @@ export function PricingSection() {
                 }`}
               />
             </button>
-            <span className={`text-sm font-medium ${isAnnual ? 'text-gray-900' : 'text-gray-500'}`}>
+            <span 
+              onClick={() => setIsAnnual(true)}
+              className={`text-sm font-medium cursor-pointer transition-colors ${isAnnual ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+            >
               Annual
             </span>
-            {isAnnual && (
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                Save 20%
-              </span>
-            )}
+            <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+              Save 20%
+            </span>
           </div>
         </motion.div>
         
@@ -153,11 +176,17 @@ export function PricingSection() {
                 <p className="mt-2 text-sm text-gray-600">{plan.description}</p>
                 <p className="mt-6">
                   <span className="text-4xl font-bold text-gray-900">
-                    ${isAnnual ? Math.round(plan.price * 0.8) : plan.price}
+                    ${isAnnual ? getAnnualPrice(plan.name) : plan.price}
                   </span>
                   <span className="text-base font-medium text-gray-500">
                     /{isAnnual ? 'year' : 'month'}
                   </span>
+                  {isAnnual && plan.price > 0 && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      <div>(equivalent to ${getMonthlyEquivalent(plan.name)}/month)</div>
+                      <div className="text-green-600">Save ${getSavings(plan)}/year</div>
+                    </div>
+                  )}
                 </p>
               </div>
               
