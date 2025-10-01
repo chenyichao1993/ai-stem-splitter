@@ -114,7 +114,7 @@ export function HomeStemSplitter() {
   }
 
   return (
-    <div id="stem-splitter-tool" className="py-20 bg-white">
+    <div id="stem-splitter-tool" className="py-12 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">

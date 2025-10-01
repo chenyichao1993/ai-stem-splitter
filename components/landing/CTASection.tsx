@@ -7,7 +7,7 @@ import { Upload, Zap, ArrowRight } from 'lucide-react'
 export function CTASection() {
   return (
     <div className="bg-gradient-to-br from-primary-600 via-secondary-600 to-accent-600">
-      <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
+      <div className="px-6 py-16 sm:px-6 sm:py-20 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -59,7 +59,7 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <div className="py-24 sm:py-32 bg-gray-50">
+    <div className="py-16 sm:py-20 bg-gray-50">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-5xl lg:text-center">
           <motion.div

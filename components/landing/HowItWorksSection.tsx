@@ -32,7 +32,7 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <div className="py-24 sm:py-32 bg-white">
+    <div className="py-16 sm:py-20 bg-white">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl lg:text-center">
           <motion.div
