@@ -25,7 +25,7 @@ const contactMethods = [
   {
     title: 'Technical Support',
     description: 'Get help with audio separation by artificial intelligence issues',
-    contact: 'support@aistemsplitter.com',
+    contact: 'motionjoy93@gmail.com',
     responseTime: 'Within 4 hours',
     icon: Users,
     color: 'bg-purple-100 text-purple-600',

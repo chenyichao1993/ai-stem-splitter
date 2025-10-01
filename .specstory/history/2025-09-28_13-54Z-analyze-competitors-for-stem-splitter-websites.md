@@ -13781,3 +13781,131 @@ text-gray-500 cursor-default    /* 灰色文本，默认光标 */
 
 ---
 
+_**User (2025-09-30 15:01Z)**_
+
+support@aistemsplitter.com改为motionjoy93@gmail.com；
+
+---
+
+_**Assistant**_
+
+```thinking
+用户看到了Contact页面的截图，发现Technical Support部分显示的是support@aistemsplitter.com，但用户希望改为motionjoy93@gmail.com。
+
+我需要找到Contact页面的文件并修改这个邮箱地址。根据之前的代码，Contact页面应该在app/contact/page.tsx文件中。
+```
+
+好的，我来修改Contact页面中的Technical Support邮箱地址。
+
+
+---
+
+Read file: undefined
+
+---
+
+我找到了需要修改的地方。在第28行，Technical Support的邮箱地址是`support@aistemsplitter.com`，我需要将其改为`motionjoy93@gmail.com`。
+
+
+---
+
+<details><summary>Edit file: app/contact/page.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -26,5 +26,5 @@
+      title: 'Technical Support',
+      description: 'Get help with audio separation by artificial intelligence issues',
+-     contact: 'support@aistemsplitter.com',
++     contact: 'motionjoy93@gmail.com',
+      responseTime: 'Within 4 hours',
+      icon: Users,
+```
+
+</details>
+
+---
+
+
+
+---
+
+## ✅ **修改完成！**
+
+我已经成功将Contact页面中Technical Support的邮箱地址从 `support@aistemsplitter.com` 改为 `motionjoy93@gmail.com`。
+
+### 🎯 **修改内容**
+
+**Technical Support部分**：
+- **之前**: `support@aistemsplitter.com`
+- **现在**: `motionjoy93@gmail.com`
+
+### 📧 **现在Contact页面的邮箱地址统一为**：
+
+1. **Email Support**: `motionjoy93@gmail.com`
+2. **Technical Support**: `motionjoy93@gmail.com` ✅ **已修改**
+
+这样所有技术支持相关的联系都统一使用您的邮箱地址了！🎉
+
+---
+
+_**User (2025-09-30 15:01Z)**_
+
+页头的Sign in也暂时改为普通文本，因为暂时没有登录功能
+
+---
+
+_**Assistant**_
+
+```thinking
+用户希望将页头的"Sign in"链接也改为普通文本，因为暂时没有登录功能。这和之前修改Footer的方案一样，需要将链接改为普通文本显示。
+
+我需要找到Header组件，然后将"Sign in"的链接改为普通文本。根据之前的代码，Header组件应该在components/layout/Header.tsx文件中。
+```
+
+好的，我来修改Header组件，将"Sign in"链接改为普通文本显示。
+
+
+---
+
+Read file: undefined
+
+---
+
+我找到了需要修改的地方。在Header组件中有两个"Sign in"链接：
+1. 桌面版：第52-57行
+2. 移动版：第113-119行
+
+我需要将这两个链接都改为普通文本显示。
+
+
+---
+
+
+
+---
+
+
+
+---
+
+
+
+---
+
+
+
+---
+
+
+
+---
+
+
+
+---
+

@@ -49,12 +49,9 @@ export function Header() {
           </div>
           
           <div className="ml-6 flex items-center space-x-4">
-            <Link
-              href="/auth/signin"
-              className="text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors"
-            >
+            <span className="text-sm font-medium text-gray-500 cursor-default">
               Sign in
-            </Link>
+            </span>
             <Link
               href="/stem-splitter"
               className="btn-primary text-sm"
@@ -110,13 +107,9 @@ export function Header() {
                 </div>
               </div>
               <div className="mt-3 space-y-1">
-                <Link
-                  href="/auth/signin"
-                  className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
+                <span className="block px-4 py-2 text-base font-medium text-gray-500 cursor-default">
                   Sign in
-                </Link>
+                </span>
                 <Link
                   href="/stem-splitter"
                   className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
