@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     question: 'Do you offer API access?',
-    answer: 'Yes, API access is available for Pro and Enterprise customers. Check our API documentation for integration details and rate limits.',
+    answer: 'Yes, API access is available for Enterprise customers. Check our API documentation for integration details and rate limits.',
   },
   {
     question: 'Can I cancel my subscription anytime?',
