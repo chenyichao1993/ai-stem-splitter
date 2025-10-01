@@ -276,7 +276,7 @@ export function PricingSection() {
                 What happens to my files?
               </h4>
               <p className="text-gray-600">
-                All uploaded files are automatically deleted after processing. We never store your audio content.
+                Files are automatically deleted after the retention period for your plan: Free (24 hours), Pro (7 days), or Enterprise (30 days). We never store your audio content permanently.
               </p>
             </div>
             <div>
@@ -292,7 +292,7 @@ export function PricingSection() {
                 Is there an API available?
               </h4>
               <p className="text-gray-600">
-                Yes, our API is available for Pro and Enterprise customers. Check our documentation for details.
+                Yes, our API is available for Enterprise customers. Check our documentation for details and integration examples.
               </p>
             </div>
           </div>
