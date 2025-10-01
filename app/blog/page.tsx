@@ -1,14 +1,10 @@
-import { Metadata } from 'next'
+'use client'
+
+import { useState } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Calendar, Clock, User, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-
-export const metadata: Metadata = {
-  title: 'Blog - AI Stem Splitter | Audio Separation Tips & Technology Insights',
-  description: 'Discover the latest insights on stem separation, vocal remover technology, and music production tips. Learn how to use AI for audio separation and music splitting.',
-  keywords: 'stem separation blog, vocal remover tips, music separation guide, audio separation tutorial, stem splitter technology, music production blog',
-}
 
 const blogPosts = [
   {
@@ -120,8 +116,14 @@ const blogPosts = [
 const categories = ['All', 'Tutorial', 'Technology', 'Review', 'Comparison', 'Technique', 'Content Creation', 'Science']
 
 export default function BlogPage() {
-  const featuredPosts = blogPosts.filter(post => post.featured)
-  const regularPosts = blogPosts.filter(post => !post.featured)
+  const [selectedCategory, setSelectedCategory] = useState('All')
+  
+  const filteredPosts = selectedCategory === 'All' 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === selectedCategory)
+  
+  const featuredPosts = filteredPosts.filter(post => post.featured)
+  const regularPosts = filteredPosts.filter(post => !post.featured)
 
   return (
     <div className="min-h-screen bg-white">
@@ -149,10 +151,11 @@ export default function BlogPage() {
             {categories.map((category) => (
               <button
                 key={category}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  category === 'All'
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-primary-50 hover:text-primary-600'
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  category === selectedCategory
+                    ? 'bg-primary-600 text-white shadow-md transform scale-105'
+                    : 'bg-white text-gray-700 hover:bg-primary-50 hover:text-primary-600 hover:shadow-sm'
                 }`}
               >
                 {category}
@@ -163,134 +166,160 @@ export default function BlogPage() {
       </div>
 
       {/* Featured Posts */}
-      <div className="py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Featured Articles</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Our most popular guides on <strong>stem separation tool</strong> technology and <strong>vocal remover online</strong> techniques.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {featuredPosts.map((post) => (
-              <article key={post.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="p-8">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <span className="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800">
-                      {post.category}
-                    </span>
-                    <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
-                      Featured
-                    </span>
+      {featuredPosts.length > 0 && (
+        <div className="py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Featured Articles</h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Our most popular guides on <strong>stem separation tool</strong> technology and <strong>vocal remover online</strong> techniques.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+              {featuredPosts.map((post) => (
+                <article key={post.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="p-8">
+                    <div className="flex items-center space-x-4 mb-4">
+                      <span className="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800">
+                        {post.category}
+                      </span>
+                      <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                        Featured
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4 text-sm text-gray-500">
+                        <div className="flex items-center">
+                          <User className="h-4 w-4 mr-1" />
+                          {post.author}
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1" />
+                          {new Date(post.date).toLocaleDateString()}
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1" />
+                          {post.readTime}
+                        </div>
+                      </div>
+                      
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors"
+                      >
+                        Read More
+                        <ArrowRight className="ml-1 h-4 w-4" />
+                      </Link>
+                    </div>
+                    
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* All Posts */}
+      {regularPosts.length > 0 && (
+        <div className="bg-gray-50 py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+                {selectedCategory === 'All' ? 'All Articles' : `${selectedCategory} Articles`}
+              </h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Explore our complete library of <strong>music separation</strong> guides and <strong>instrumental separator</strong> tutorials.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {regularPosts.map((post) => (
+                <article key={post.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="p-6">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-1 text-xs font-medium text-primary-800">
+                        {post.category}
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-gray-600 mb-4 line-clamp-2 text-sm">
+                      {post.excerpt}
+                    </p>
+                    
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
                       <div className="flex items-center">
-                        <User className="h-4 w-4 mr-1" />
+                        <User className="h-3 w-3 mr-1" />
                         {post.author}
                       </div>
                       <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
+                        <Calendar className="h-3 w-3 mr-1" />
                         {new Date(post.date).toLocaleDateString()}
                       </div>
                       <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
+                        <Clock className="h-3 w-3 mr-1" />
                         {post.readTime}
                       </div>
                     </div>
                     
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+                      className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors"
                     >
                       Read More
-                      <ArrowRight className="ml-1 h-4 w-4" />
+                      <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                   </div>
-                  
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* All Posts */}
-      <div className="bg-gray-50 py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">All Articles</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Explore our complete library of <strong>music separation</strong> guides and <strong>instrumental separator</strong> tutorials.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {regularPosts.map((post) => (
-              <article key={post.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="p-6">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-1 text-xs font-medium text-primary-800">
-                      {post.category}
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  
-                  <p className="text-gray-600 mb-4 line-clamp-2 text-sm">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                    <div className="flex items-center">
-                      <User className="h-3 w-3 mr-1" />
-                      {post.author}
-                    </div>
-                    <div className="flex items-center">
-                      <Calendar className="h-3 w-3 mr-1" />
-                      {new Date(post.date).toLocaleDateString()}
-                    </div>
-                    <div className="flex items-center">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {post.readTime}
-                    </div>
-                  </div>
-                  
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
-                  >
-                    Read More
-                    <ArrowRight className="ml-1 h-3 w-3" />
-                  </Link>
-                </div>
-              </article>
-            ))}
+      {/* No Results Message */}
+      {filteredPosts.length === 0 && (
+        <div className="py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900">No articles found</h2>
+              <p className="mt-4 text-gray-600">
+                No articles found in the <strong>{selectedCategory}</strong> category. Try selecting a different category.
+              </p>
+              <button
+                onClick={() => setSelectedCategory('All')}
+                className="mt-6 inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+              >
+                View All Articles
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Newsletter Signup */}
       <div className="bg-primary-600 py-16">
