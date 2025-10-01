@@ -5,20 +5,20 @@ const navigation = {
   product: [
     { name: 'Stem Splitter', href: '/stem-splitter' },
     { name: 'Pricing', href: '/pricing' },
-    { name: 'API Documentation', href: '/api-docs' },
-    { name: 'Changelog', href: '/changelog' },
+    { name: 'API Documentation', href: null }, // 暂时不可用
+    { name: 'Changelog', href: null }, // 暂时不可用
   ],
   support: [
     { name: 'Help Center', href: '/help' },
     { name: 'Contact Us', href: '/contact' },
-    { name: 'Status', href: '/status' },
-    { name: 'Community', href: '/community' },
+    { name: 'Status', href: null }, // 暂时不可用
+    { name: 'Community', href: null }, // 暂时不可用
   ],
   company: [
     { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Press', href: '/press' },
+    { name: 'Blog', href: null }, // 暂时不可用
+    { name: 'Careers', href: null }, // 暂时不可用
+    { name: 'Press', href: null }, // 暂时不可用
   ],
   legal: [
     { name: 'Privacy Policy', href: '/privacy' },
@@ -85,12 +85,18 @@ export function Footer() {
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.product.map((item) => (
                     <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
+                      {item.href ? (
+                        <Link
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span className="text-sm leading-6 text-gray-500 cursor-default">
+                          {item.name}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -100,12 +106,18 @@ export function Footer() {
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.support.map((item) => (
                     <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
+                      {item.href ? (
+                        <Link
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span className="text-sm leading-6 text-gray-500 cursor-default">
+                          {item.name}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -117,12 +129,18 @@ export function Footer() {
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.company.map((item) => (
                     <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
+                      {item.href ? (
+                        <Link
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span className="text-sm leading-6 text-gray-500 cursor-default">
+                          {item.name}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -132,12 +150,18 @@ export function Footer() {
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.legal.map((item) => (
                     <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
+                      {item.href ? (
+                        <Link
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span className="text-sm leading-6 text-gray-500 cursor-default">
+                          {item.name}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
