@@ -27,12 +27,9 @@ export function BackToTop() {
     }
   }, [])
 
-  // 滚动到页面顶部
+  // 瞬间跳转到页面顶部
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
+    window.scrollTo(0, 0)
   }
 
   return (

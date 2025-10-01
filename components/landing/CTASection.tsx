@@ -31,13 +31,20 @@ export function CTASection() {
             viewport={{ once: true }}
             className="mt-10 flex items-center justify-center gap-x-6"
           >
-            <Link
-              href="/stem-splitter"
+            <button
+              onClick={() => {
+                const element = document.getElementById('stem-splitter-tool')
+                if (element) {
+                  const elementTop = element.offsetTop
+                  const offset = 80 // 考虑导航栏高度，留出额外空间
+                  window.scrollTo(0, elementTop - offset)
+                }
+              }}
               className="flex items-center rounded-lg bg-white px-6 py-3 text-base font-semibold text-primary-600 shadow-sm hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
             >
               Start Free Trial
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            </button>
             <Link
               href="/pricing"
               className="text-base font-semibold leading-6 text-white hover:text-primary-100 transition-colors"
