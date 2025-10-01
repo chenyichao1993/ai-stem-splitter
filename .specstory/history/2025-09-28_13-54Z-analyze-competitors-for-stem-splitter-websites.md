@@ -8354,3 +8354,181 @@ Lines added: 1, lines removed: 1
 
 ---
 
+_**User (2025-09-30 15:00Z)**_
+
+如图，这部分内容的行间距可以调小些
+
+---
+
+_**Assistant**_
+
+```thinking
+用户指出定价页面的行间距可以调小一些。从图片描述中可以看到，用户圈出了整个定价区域，想要进一步减少行间距来让内容更紧凑。
+
+我需要找到并调整相关的间距设置。可能包括：
+1. 标题和信任信号之间的间距
+2. 信任信号和切换按钮之间的间距
+3. 切换按钮和定价卡片之间的间距
+4. 定价卡片内部的间距
+
+让我检查当前的间距设置并进行调整。
+```
+
+好的！让我进一步减少定价区域的间距，让内容更紧凑：
+
+
+---
+
+<details><summary>Edit file: components/landing/PricingSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -118,5 +118,5 @@
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+-           className="mt-12 flex justify-center"
++           className="mt-8 flex justify-center"
+          >
+            <div className="flex items-center space-x-6 text-sm text-gray-600">
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: components/landing/PricingSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -142,5 +142,5 @@
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+-           className="mt-8 flex justify-center"
++           className="mt-6 flex justify-center"
+          >
+            <div className="flex items-center space-x-4">
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: components/landing/PricingSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -173,5 +173,5 @@
+          </motion.div>
+          
+-         <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
++         <div className="mx-auto mt-12 grid max-w-lg grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-3">
+            {plans.map((plan, index) => (
+              <motion.div
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: components/landing/PricingSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -215,5 +215,5 @@
+                </div>
+                
+-               <ul className="mt-8 space-y-2">
++               <ul className="mt-6 space-y-2">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start">
+```
+
+</details>
+
+---
+
+<details><summary>Edit file: components/landing/PricingSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -230,5 +230,5 @@
+                </ul>
+                
+-               <div className="mt-8">
++               <div className="mt-6">
+                  <Link
+                    href={plan.href}
+```
+
+</details>
+
+---
+
+现在检查是否有语法错误：
+
+
+---
+
+
+
+---
+
+## ✅ 行间距优化完成！
+
+我已经全面减少了定价区域的间距，让内容更加紧凑：
+
+### 🎯 **间距优化内容**：
+
+#### 1. **标题到信任信号**：
+- **之前**：`mt-12` (48px)
+- **现在**：`mt-8` (32px)
+- **节省**：16px
+
+#### 2. **信任信号到切换按钮**：
+- **之前**：`mt-8` (32px)
+- **现在**：`mt-6` (24px)
+- **节省**：8px
+
+#### 3. **切换按钮到定价卡片**：
+- **之前**：`mt-16` (64px)
+- **现在**：`mt-12` (48px)
+- **节省**：16px
+
+#### 4. **定价卡片间距**：
+- **之前**：`gap-8` (32px)
+- **现在**：`gap-6` (24px)
+- **节省**：8px
+
+#### 5. **卡片内部间距**：
+- **价格到功能列表**：`mt-8` → `mt-6` (节省8px)
+- **功能列表到按钮**：`mt-8` → `mt-6` (节省8px)
+
+### 📊 **总体优化效果**：
+- **垂直空间节省**：约64px (约25-30%的间距减少)
+- **视觉密度**：更紧凑，但仍保持良好的可读性
+- **一屏显示**：现在应该能更好地适应一屏显示
+
+现在定价页面更加紧凑，应该能在一屏内显示更多内容！🎉
+
+---
+

@@ -117,7 +117,7 @@ export function PricingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}
-          className="mt-12 flex justify-center"
+          className="mt-8 flex justify-center"
         >
           <div className="flex items-center space-x-6 text-sm text-gray-600">
             <div className="flex items-center">
@@ -141,7 +141,7 @@ export function PricingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="mt-8 flex justify-center"
+          className="mt-6 flex justify-center"
         >
           <div className="flex items-center space-x-4">
             <span 
@@ -172,7 +172,7 @@ export function PricingSection() {
           </div>
         </motion.div>
         
-        <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
+        <div className="mx-auto mt-12 grid max-w-lg grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-3">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -214,7 +214,7 @@ export function PricingSection() {
                 </p>
               </div>
               
-              <ul className="mt-8 space-y-2">
+              <ul className="mt-6 space-y-2">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start">
                     <Check className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
@@ -229,7 +229,7 @@ export function PricingSection() {
                 ))}
               </ul>
               
-              <div className="mt-8">
+              <div className="mt-6">
                 <Link
                   href={plan.href}
                   className={`block w-full rounded-lg px-4 py-3 text-center text-sm font-semibold transition-colors ${
