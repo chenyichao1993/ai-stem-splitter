@@ -84,14 +84,6 @@ export function HowItWorksSection() {
                   </p>
                 </div>
                 
-                {/* Arrow connector */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-full w-full">
-                    <div className="flex items-center justify-center">
-                      <ArrowRight className="h-6 w-6 text-gray-300" />
-                    </div>
-                  </div>
-                )}
               </motion.div>
             ))}
           </div>

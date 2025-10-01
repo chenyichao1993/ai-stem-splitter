@@ -9673,3 +9673,106 @@ Lines added: 1, lines removed: 1
 
 ---
 
+_**User (2025-09-30 15:00Z)**_
+
+如图，我圈出来的两个图标，左下角有明显的“灰色向右指的箭头”，这是错误的，不需要，影响美观，精准定位，把它们删掉
+
+---
+
+_**Assistant**_
+
+```thinking
+用户指出在"How it works"部分，有两个图标左下角有明显的"灰色向右指的箭头"，这是错误的，不需要，影响美观。
+
+从图片描述中可以看到，这是"How it works"部分，有三个步骤：
+1. Step 1: Upload Audio - 向上箭头图标
+2. Step 2: AI Processing - 黄色闪电图标  
+3. Step 3: Download Results - 向下箭头图标
+
+用户说有两个图标左下角有灰色向右指的箭头，这可能是图标本身的问题，或者是CSS样式问题。
+
+我需要精准定位到HowItWorksSection.tsx文件，找到这些图标并修复。
+```
+
+您说得对！那些灰色向右指的箭头确实影响美观。让我精准定位到HowItWorksSection组件并修复这些图标：
+
+
+---
+
+Read file: undefined
+
+---
+
+我找到了问题！在第88-94行有箭头连接器，这些就是您看到的灰色向右指的箭头。让我删除这些箭头：
+
+
+---
+
+<details><summary>Edit file: components/landing/HowItWorksSection.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: undefined, lines removed: 8
+
+```diff
+@@ -85,12 +85,4 @@
+                  </div>
+                  
+-                 {/* Arrow connector */}
+-                 {index < steps.length - 1 && (
+-                   <div className="hidden lg:block absolute top-8 left-full w-full">
+-                     <div className="flex items-center justify-center">
+-                       <ArrowRight className="h-6 w-6 text-gray-300" />
+-                     </div>
+-                   </div>
+-                 )}
+                </motion.div>
+              ))}
+```
+
+</details>
+
+---
+
+现在检查是否有语法错误：
+
+
+---
+
+
+
+---
+
+## ✅ 灰色箭头删除完成！
+
+我已经成功删除了HowItWorksSection组件中的灰色向右指的箭头：
+
+### 🎯 **修改内容**：
+
+#### **精准定位**：
+- **文件**：`components/landing/HowItWorksSection.tsx`
+- **位置**：第88-94行，箭头连接器部分
+
+#### **删除内容**：
+```javascript
+{/* Arrow connector */}
+{index < steps.length - 1 && (
+  <div className="hidden lg:block absolute top-8 left-full w-full">
+    <div className="flex items-center justify-center">
+      <ArrowRight className="h-6 w-6 text-gray-300" />
+    </div>
+  </div>
+)}
+```
+
+### 🎨 **优化效果**：
+- ✅ 删除了影响美观的灰色向右箭头
+- ✅ 保持了三个步骤的清晰布局
+- ✅ 视觉更加简洁干净
+- ✅ 没有影响其他功能
+
+现在"How it works"部分的三个步骤图标更加简洁美观，没有多余的箭头干扰！🎉
+
+---
+
