@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { HomeStemSplitter } from '@/components/landing/HomeStemSplitter'
+import { InteractiveDemoSection } from '@/components/interactive-demo/InteractiveDemoSection'
 import { FeaturesSection } from '@/components/landing/FeaturesSection'
 import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
 import { PricingSection } from '@/components/landing/PricingSection'
@@ -44,6 +45,7 @@ export default function HomePage() {
       <main>
         <HomeStemSplitter />
         <HeroSection />
+        <InteractiveDemoSection />
         <FeaturesSection />
         <HowItWorksSection />
         <PricingSection />
