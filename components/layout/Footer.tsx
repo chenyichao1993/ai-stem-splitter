@@ -46,6 +46,8 @@ const navigation = {
 }
 
 export function Footer() {
+  const currentYear = new Date().getFullYear()
+  
   return (
     <footer className="bg-gray-900" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
@@ -145,7 +147,7 @@ export function Footer() {
         </div>
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-gray-400">
-            &copy; 2024 AI Stem Splitter. All rights reserved.
+            &copy; {currentYear} AI Stem Splitter. All rights reserved.
           </p>
         </div>
       </div>
