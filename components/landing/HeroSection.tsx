@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Play, Upload, Zap, Shield, Clock } from 'lucide-react'
+import { Play, Upload, Zap, Shield, Clock, Mic, Drum, Guitar, Piano } from 'lucide-react'
 
 export function HeroSection() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
@@ -123,22 +123,33 @@ export function HeroSection() {
                   </div>
                 </div>
                 
-                {/* Results preview */}
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  {['Vocals', 'Drums', 'Bass', 'Guitar'].map((stem, index) => (
-                    <div key={stem} className="bg-gray-800 rounded-lg p-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-gray-300">{stem}</span>
-                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                      </div>
-                      <div className="h-1 bg-gray-700 rounded-full">
-                        <div 
-                          className="h-1 bg-primary-500 rounded-full"
-                          style={{ width: `${75 + index * 5}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+                {/* Separated Audio Stems */}
+                <div className="mt-6 space-y-3">
+                  <div className="flex items-center">
+                    <Mic className="h-4 w-4 text-primary-400 mr-3" />
+                    <span className="text-xs text-gray-300">Vocals</span>
+                    <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="flex items-center">
+                    <Drum className="h-4 w-4 text-primary-400 mr-3" />
+                    <span className="text-xs text-gray-300">Drums</span>
+                    <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="flex items-center">
+                    <Guitar className="h-4 w-4 text-primary-400 mr-3" />
+                    <span className="text-xs text-gray-300">Bass</span>
+                    <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="flex items-center">
+                    <Guitar className="h-4 w-4 text-primary-400 mr-3" />
+                    <span className="text-xs text-gray-300">Guitar</span>
+                    <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="flex items-center">
+                    <Piano className="h-4 w-4 text-primary-400 mr-3" />
+                    <span className="text-xs text-gray-300">Piano</span>
+                    <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
+                  </div>
                 </div>
               </div>
               
