@@ -163,9 +163,9 @@ export function HomeStemSplitter() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className={`grid grid-cols-1 gap-8 ${uploadedFile ? 'lg:grid-cols-2' : 'lg:grid-cols-3'}`}>
           {/* Upload Section */}
-          <div className="lg:col-span-2">
+          <div className={uploadedFile ? 'lg:col-span-1' : 'lg:col-span-2'}>
             <div className="card">
               <h3 className="text-xl font-semibold text-gray-900 mb-6">
                 Upload Audio File - Get Separated Stems
