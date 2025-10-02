@@ -39,10 +39,25 @@ export function generateId(): string {
 }
 
 export function validateAudioFile(file: File): { valid: boolean; error?: string } {
-  const allowedTypes = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/flac', 'audio/m4a', 'audio/aac']
+  const allowedTypes = [
+    'audio/mpeg', 
+    'audio/mp4', 
+    'video/mp4',  // MP4 files can have video/mp4 MIME type
+    'audio/wav', 
+    'audio/flac', 
+    'audio/m4a', 
+    'audio/aac',
+    'audio/x-m4a', // Alternative M4A MIME type
+    'audio/mp3'    // Alternative MP3 MIME type
+  ]
+  const allowedExtensions = ['.mp3', '.mp4', '.wav', '.flac', '.m4a', '.aac']
   const maxSize = 50 * 1024 * 1024 // 50MB for free users
   
-  if (!allowedTypes.includes(file.type)) {
+  // Check both MIME type and file extension
+  const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+  const isValidType = allowedTypes.includes(file.type) || allowedExtensions.includes(fileExtension)
+  
+  if (!isValidType) {
     return {
       valid: false,
       error: 'Unsupported file format. Please upload MP3, MP4, WAV, FLAC, M4A, or AAC files.'

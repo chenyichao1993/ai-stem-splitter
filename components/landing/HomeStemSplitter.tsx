@@ -55,7 +55,13 @@ export function HomeStemSplitter() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [processingProgress, setProcessingProgress] = useState(0)
-  const [separatedStems, setSeparatedStems] = useState<any>(null)
+  const [separatedStems, setSeparatedStems] = useState<{
+    vocals: { name: string; url: string; size: number }
+    drums: { name: string; url: string; size: number }
+    bass: { name: string; url: string; size: number }
+    guitar: { name: string; url: string; size: number }
+    piano: { name: string; url: string; size: number }
+  } | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -77,7 +83,8 @@ export function HomeStemSplitter() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'audio/*': ['.mp3', '.mp4', '.wav', '.flac', '.m4a', '.aac']
+      'audio/*': ['.mp3', '.mp4', '.wav', '.flac', '.m4a', '.aac'],
+      'video/mp4': ['.mp4'] // MP4 files can have video/mp4 MIME type
     },
     multiple: false,
     maxSize: 50 * 1024 * 1024 // 50MB
@@ -316,6 +323,7 @@ export function HomeStemSplitter() {
                       const Icon = stemIcons[stemType as keyof typeof stemIcons]
                       const color = stemColors[stemType as keyof typeof stemColors]
                       const bgColor = stemBgColors[stemType as keyof typeof stemBgColors]
+                      const stemData = stem as { name: string; url: string; size: number }
 
                       return (
                         <motion.div
@@ -332,10 +340,10 @@ export function HomeStemSplitter() {
                               </div>
                               <div>
                                 <h4 className="font-medium text-gray-900 capitalize">
-                                  {stem.name}
+                                  {stemData.name}
                                 </h4>
                                 <p className="text-sm text-gray-500">
-                                  {formatFileSize(stem.size)}
+                                  {formatFileSize(stemData.size)}
                                 </p>
                               </div>
                             </div>
