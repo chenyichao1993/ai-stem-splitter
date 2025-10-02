@@ -24,8 +24,32 @@ import {
 import { validateAudioFile, formatFileSize } from '@/lib/utils'
 import { AudioPlayer } from '../stem-splitter/AudioPlayer'
 import { ProcessingStatus } from '../stem-splitter/ProcessingStatus'
-import { SeparatedStems } from '../stem-splitter/SeparatedStems'
 import toast from 'react-hot-toast'
+
+// Stem icons and colors
+const stemIcons = {
+  vocals: Mic,
+  drums: Drum,
+  bass: Guitar,
+  guitar: Guitar,
+  piano: Piano,
+}
+
+const stemColors = {
+  vocals: 'text-red-500',
+  drums: 'text-yellow-500',
+  bass: 'text-blue-500',
+  guitar: 'text-green-500',
+  piano: 'text-purple-500',
+}
+
+const stemBgColors = {
+  vocals: 'bg-red-50',
+  drums: 'bg-yellow-50',
+  bass: 'bg-blue-50',
+  guitar: 'bg-green-50',
+  piano: 'bg-purple-50',
+}
 
 export function HomeStemSplitter() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
@@ -214,58 +238,169 @@ export function HomeStemSplitter() {
             </div>
           </div>
 
-          {/* Sidebar */}
+          {/* Results Section */}
           <div className="space-y-6">
-            {/* Features */}
+            {/* Dynamic Results Display */}
             <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Separated Audio Stems
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <Mic className="h-5 w-5 text-primary-600 mr-3" />
-                  <span className="text-sm text-gray-600">Vocals</span>
+              {!uploadedFile ? (
+                // Initial state - show features
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    What You'll Get
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center">
+                      <Mic className="h-5 w-5 text-primary-600 mr-3" />
+                      <span className="text-sm text-gray-600">Vocals</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Drum className="h-5 w-5 text-primary-600 mr-3" />
+                      <span className="text-sm text-gray-600">Drums</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Guitar className="h-5 w-5 text-primary-600 mr-3" />
+                      <span className="text-sm text-gray-600">Bass</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Guitar className="h-5 w-5 text-primary-600 mr-3" />
+                      <span className="text-sm text-gray-600">Guitar</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Piano className="h-5 w-5 text-primary-600 mr-3" />
+                      <span className="text-sm text-gray-600">Piano</span>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-700">
+                      <strong>Perfect for:</strong> Music Producers, DJs, Content Creators, Musicians
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <Drum className="h-5 w-5 text-primary-600 mr-3" />
-                  <span className="text-sm text-gray-600">Drums</span>
+              ) : isProcessing ? (
+                // Processing state
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Processing Your Audio
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Separating stems...</span>
+                      <span className="text-primary-600 font-medium">{Math.round(processingProgress)}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-primary-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${processingProgress}%` }}
+                      ></div>
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      This usually takes 30-60 seconds
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <Guitar className="h-5 w-5 text-primary-600 mr-3" />
-                  <span className="text-sm text-gray-600">Bass</span>
-                </div>
-                <div className="flex items-center">
-                  <Guitar className="h-5 w-5 text-primary-600 mr-3" />
-                  <span className="text-sm text-gray-600">Guitar</span>
-                </div>
-                <div className="flex items-center">
-                  <Piano className="h-5 w-5 text-primary-600 mr-3" />
-                  <span className="text-sm text-gray-600">Piano</span>
-                </div>
-              </div>
-            </div>
+              ) : separatedStems ? (
+                // Results state
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Separated Stems
+                    </h3>
+                    <div className="flex items-center space-x-2 text-sm text-green-600">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>Complete</span>
+                    </div>
+                  </div>
 
-            {/* Tips */}
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Perfect for
-              </h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• <strong>Music Producers</strong> - Create remixes & samples</li>
-                <li>• <strong>DJs</strong> - Extract vocals for live sets</li>
-                <li>• <strong>Content Creators</strong> - Remove vocals for videos</li>
-                <li>• <strong>Musicians</strong> - Practice with instrumentals</li>
-              </ul>
-            </div>
+                  <div className="space-y-4">
+                    {Object.entries(separatedStems).map(([stemType, stem], index) => {
+                      const Icon = stemIcons[stemType as keyof typeof stemIcons]
+                      const color = stemColors[stemType as keyof typeof stemColors]
+                      const bgColor = stemBgColors[stemType as keyof typeof stemBgColors]
 
-            {/* Results */}
-            {separatedStems && (
-              <SeparatedStems 
-                stems={separatedStems}
-                onDownload={handleDownload}
-                onDownloadAll={handleDownloadAll}
-              />
-            )}
+                      return (
+                        <motion.div
+                          key={stemType}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                          className={`p-4 rounded-lg border ${bgColor} border-gray-200`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className={`p-2 rounded-lg ${bgColor}`}>
+                                <Icon className={`h-5 w-5 ${color}`} />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 capitalize">
+                                  {stem.name}
+                                </h4>
+                                <p className="text-sm text-gray-500">
+                                  {formatFileSize(stem.size)}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => handleDownload(stemType)}
+                                className="p-2 text-gray-500 hover:text-primary-600 transition-colors"
+                                title="Download"
+                              >
+                                <Download className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Waveform placeholder */}
+                          <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-gradient-to-r from-gray-300 to-gray-400 rounded-full animate-pulse" />
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Download All Button */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.5 }}
+                    className="mt-6 pt-6 border-t border-gray-200"
+                  >
+                    <button
+                      onClick={handleDownloadAll}
+                      className="w-full btn-primary flex items-center justify-center"
+                    >
+                      <Download className="mr-2 h-5 w-5" />
+                      Download All Stems
+                    </button>
+                  </motion.div>
+
+                  {/* Info */}
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-xs text-blue-700">
+                      <strong>Note:</strong> Your separated stems will be automatically deleted after 24 hours for privacy protection.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                // File uploaded but not processed yet
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Ready to Process
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center">
+                      <FileAudio className="h-5 w-5 text-primary-600 mr-3" />
+                      <span className="text-sm text-gray-600">{uploadedFile.name}</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Click "Separate Stems Now" to start processing
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
