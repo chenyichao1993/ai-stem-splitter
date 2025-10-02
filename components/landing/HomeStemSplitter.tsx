@@ -113,7 +113,6 @@ export function HomeStemSplitter() {
               guitar: { name: 'Guitar', url: '#', size: 1792000 },
               piano: { name: 'Piano', url: '#', size: 1280000 },
             })
-            toast.success('Audio separation completed!')
             return 100
           }
           return prev + Math.random() * 10
@@ -149,16 +148,13 @@ export function HomeStemSplitter() {
     if (playingStem === stemType) {
       // Stop playing
       setPlayingStem(null)
-      toast.success(`${stemType} playback stopped`)
     } else {
       // Start playing
       setPlayingStem(stemType)
-      toast.success(`Playing ${stemType}...`)
       
       // Simulate playback duration (3 seconds for demo)
       setTimeout(() => {
         setPlayingStem(null)
-        toast.success(`${stemType} playback completed`)
       }, 3000)
     }
   }
