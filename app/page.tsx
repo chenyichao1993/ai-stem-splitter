@@ -45,7 +45,9 @@ export default function HomePage() {
       <main>
         <HomeStemSplitter />
         <HeroSection />
-        <InteractiveDemoSection />
+        <div className="hidden">
+          <InteractiveDemoSection />
+        </div>
         <FeaturesSection />
         <HowItWorksSection />
         <PricingSection />
