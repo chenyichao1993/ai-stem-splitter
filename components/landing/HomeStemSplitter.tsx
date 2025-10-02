@@ -26,6 +26,9 @@ import { AudioPlayer } from '../stem-splitter/AudioPlayer'
 import { ProcessingStatus } from '../stem-splitter/ProcessingStatus'
 import toast from 'react-hot-toast'
 
+// API配置
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
+
 // Stem icons and colors
 const stemIcons = {
   vocals: Mic,
@@ -53,6 +56,7 @@ const stemBgColors = {
 
 export function HomeStemSplitter() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [uploadedFileId, setUploadedFileId] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [processingProgress, setProcessingProgress] = useState(0)
   const [separatedStems, setSeparatedStems] = useState<{
@@ -65,7 +69,7 @@ export function HomeStemSplitter() {
   const [error, setError] = useState<string | null>(null)
   const [playingStem, setPlayingStem] = useState<string | null>(null)
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
     if (!file) return
 
@@ -76,9 +80,36 @@ export function HomeStemSplitter() {
       return
     }
 
-    setUploadedFile(file)
-    setError(null)
-    toast.success('File uploaded successfully!')
+    try {
+      // 上传文件到API
+      const formData = new FormData()
+      formData.append('audio', file)
+      
+      const response = await fetch(`${API_BASE_URL}/upload`, {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error('Upload failed')
+      }
+
+      const result = await response.json()
+      
+      if (result.success) {
+        setUploadedFile(file)
+        setError(null)
+        // 存储文件ID用于后续处理
+        setUploadedFileId(result.data.fileId)
+        toast.success('File uploaded successfully!')
+      } else {
+        throw new Error(result.error || 'Upload failed')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Upload failed. Please try again.')
+      setError('Upload failed. Please try again.')
+    }
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -92,34 +123,79 @@ export function HomeStemSplitter() {
   })
 
   const handleProcess = async () => {
-    if (!uploadedFile) return
+    if (!uploadedFile || !uploadedFileId) return
 
     setIsProcessing(true)
     setProcessingProgress(0)
     setError(null)
 
     try {
-      // Simulate processing with progress updates
-      const interval = setInterval(() => {
-        setProcessingProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval)
+      // 开始处理
+      const response = await fetch(`${API_BASE_URL}/process`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fileId: uploadedFileId })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to start processing')
+      }
+
+      const result = await response.json()
+      
+      if (result.success) {
+        const jobId = result.data.jobId
+        toast.success('Processing started!')
+        
+        // 轮询处理状态
+        const pollStatus = async () => {
+          try {
+            const statusResponse = await fetch(`${API_BASE_URL}/process/${jobId}`)
+            const statusResult = await statusResponse.json()
+            
+            if (statusResult.success) {
+              setProcessingProgress(statusResult.data.progress)
+              
+              if (statusResult.data.status === 'completed') {
+                setIsProcessing(false)
+                // 转换API返回的stems格式
+                const stems = statusResult.data.stems
+                if (stems) {
+                  setSeparatedStems({
+                    vocals: stems.vocals ? { name: 'Vocals', url: stems.vocals, size: 1024000 } : undefined,
+                    drums: stems.drums ? { name: 'Drums', url: stems.drums, size: 2048000 } : undefined,
+                    bass: stems.bass ? { name: 'Bass', url: stems.bass, size: 1536000 } : undefined,
+                    guitar: stems.guitar ? { name: 'Guitar', url: stems.guitar, size: 1792000 } : undefined,
+                    piano: stems.piano ? { name: 'Piano', url: stems.piano, size: 1280000 } : undefined,
+                  })
+                }
+                toast.success('Audio separation completed!')
+              } else if (statusResult.data.status === 'failed') {
+                setIsProcessing(false)
+                setError(statusResult.data.error || 'Processing failed')
+                toast.error('Processing failed')
+              } else {
+                // 继续轮询
+                setTimeout(pollStatus, 1000)
+              }
+            }
+          } catch (error) {
+            console.error('Status check error:', error)
             setIsProcessing(false)
-            // Simulate successful processing
-            setSeparatedStems({
-              vocals: { name: 'Vocals', url: '#', size: 1024000 },
-              drums: { name: 'Drums', url: '#', size: 2048000 },
-              bass: { name: 'Bass', url: '#', size: 1536000 },
-              guitar: { name: 'Guitar', url: '#', size: 1792000 },
-              piano: { name: 'Piano', url: '#', size: 1280000 },
-            })
-            return 100
+            setError('Failed to check processing status')
           }
-          return prev + Math.random() * 10
-        })
-      }, 200)
+        }
+        
+        // 开始轮询
+        setTimeout(pollStatus, 1000)
+      } else {
+        throw new Error(result.error || 'Failed to start processing')
+      }
 
     } catch (err) {
+      console.error('Processing error:', err)
       setError('Processing failed. Please try again.')
       toast.error('Processing failed. Please try again.')
       setIsProcessing(false)
@@ -128,15 +204,30 @@ export function HomeStemSplitter() {
 
   const handleReset = () => {
     setUploadedFile(null)
+    setUploadedFileId(null)
     setSeparatedStems(null)
     setError(null)
     setProcessingProgress(0)
     setIsProcessing(false)
+    setPlayingStem(null)
   }
 
-  const handleDownload = (stemType: string) => {
-    toast.success(`Downloading ${stemType}...`)
-    // Implement actual download logic here
+  const handleDownload = async (stemType: string) => {
+    try {
+      // TODO: 需要从处理状态中获取jobId
+      // 这里先用模拟的方式
+      const response = await fetch(`${API_BASE_URL}/download/mock-job-id/${stemType}`)
+      
+      if (response.ok) {
+        toast.success(`Downloading ${stemType}...`)
+        // 实际下载逻辑
+      } else {
+        toast.error('Download failed')
+      }
+    } catch (error) {
+      console.error('Download error:', error)
+      toast.error('Download failed')
+    }
   }
 
   const handleDownloadAll = () => {
