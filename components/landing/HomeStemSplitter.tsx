@@ -97,11 +97,11 @@ export function HomeStemSplitter() {
       const result = await response.json()
       
       if (result.success) {
-        setUploadedFile(file)
-        setError(null)
+    setUploadedFile(file)
+    setError(null)
         // 存储文件ID用于后续处理
         setUploadedFileId(result.data.fileId)
-        toast.success('File uploaded successfully!')
+    toast.success('File uploaded successfully!')
       } else {
         throw new Error(result.error || 'Upload failed')
       }
@@ -219,7 +219,7 @@ export function HomeStemSplitter() {
       const response = await fetch(`${API_BASE_URL}/download/mock-job-id/${stemType}`)
       
       if (response.ok) {
-        toast.success(`Downloading ${stemType}...`)
+    toast.success(`Downloading ${stemType}...`)
         // 实际下载逻辑
       } else {
         toast.error('Download failed')
@@ -320,8 +320,8 @@ export function HomeStemSplitter() {
                     </button>
                   </div>
 
-                   {/* Audio Player */}
-                   <AudioPlayer file={uploadedFile} />
+                  {/* Audio Player */}
+                  <AudioPlayer file={uploadedFile} />
 
                    {/* Upload New File Button */}
                    <button
@@ -357,16 +357,16 @@ export function HomeStemSplitter() {
                      Upload New File
                    </button>
 
-                   {/* Process Button */}
-                   {!isProcessing && !separatedStems && (
-                     <button
-                       onClick={handleProcess}
+                  {/* Process Button */}
+                  {!isProcessing && !separatedStems && (
+                    <button
+                      onClick={handleProcess}
                        className="w-full btn-primary text-lg py-4 flex items-center justify-center"
-                     >
-                       <Music className="mr-2 h-5 w-5" />
+                    >
+                      <Music className="mr-2 h-5 w-5" />
                        Separate Stems Now
-                     </button>
-                   )}
+                    </button>
+                  )}
 
                   {/* Processing Status */}
                   {isProcessing && (
@@ -392,31 +392,31 @@ export function HomeStemSplitter() {
               {!uploadedFile ? (
                 // Initial state - show features
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     What You'll Get
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <Mic className="h-5 w-5 text-primary-600 mr-3" />
-                      <span className="text-sm text-gray-600">Vocals</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Drum className="h-5 w-5 text-primary-600 mr-3" />
-                      <span className="text-sm text-gray-600">Drums</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Guitar className="h-5 w-5 text-primary-600 mr-3" />
-                      <span className="text-sm text-gray-600">Bass</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Guitar className="h-5 w-5 text-primary-600 mr-3" />
-                      <span className="text-sm text-gray-600">Guitar</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Piano className="h-5 w-5 text-primary-600 mr-3" />
-                      <span className="text-sm text-gray-600">Piano</span>
-                    </div>
-                  </div>
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <Mic className="h-5 w-5 text-primary-600 mr-3" />
+                  <span className="text-sm text-gray-600">Vocals</span>
+                </div>
+                <div className="flex items-center">
+                  <Drum className="h-5 w-5 text-primary-600 mr-3" />
+                  <span className="text-sm text-gray-600">Drums</span>
+                </div>
+                <div className="flex items-center">
+                  <Guitar className="h-5 w-5 text-primary-600 mr-3" />
+                  <span className="text-sm text-gray-600">Bass</span>
+                </div>
+                <div className="flex items-center">
+                  <Guitar className="h-5 w-5 text-primary-600 mr-3" />
+                  <span className="text-sm text-gray-600">Guitar</span>
+                </div>
+                <div className="flex items-center">
+                  <Piano className="h-5 w-5 text-primary-600 mr-3" />
+                  <span className="text-sm text-gray-600">Piano</span>
+                </div>
+              </div>
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-700">
                       <strong>Perfect for:</strong> Music Producers, DJs, Content Creators, Musicians
@@ -517,7 +517,7 @@ export function HomeStemSplitter() {
                         </motion.div>
                       )
                     })}
-                  </div>
+            </div>
 
                   {/* Download All Button */}
                   <motion.div
@@ -545,9 +545,9 @@ export function HomeStemSplitter() {
               ) : (
                 // File uploaded but not processed yet
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Ready to Process
-                  </h3>
+              </h3>
                   <div className="space-y-3">
                     <div className="flex items-center">
                       <FileAudio className="h-5 w-5 text-primary-600 mr-3" />
