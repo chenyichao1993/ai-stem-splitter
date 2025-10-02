@@ -217,16 +217,16 @@ export function HomeStemSplitter() {
                   {/* Audio Player */}
                   <AudioPlayer file={uploadedFile} />
 
-                  {/* Process Button */}
-                  {!isProcessing && !separatedStems && (
-                    <button
-                      onClick={handleProcess}
-                      className="w-full btn-primary text-lg py-4"
-                    >
-                      <Music className="mr-2 h-5 w-5" />
-                      Separate Stems Now - Free
-                    </button>
-                  )}
+                   {/* Process Button */}
+                   {!isProcessing && !separatedStems && (
+                     <button
+                       onClick={handleProcess}
+                       className="w-full btn-primary text-lg py-4 flex items-center justify-center"
+                     >
+                       <Music className="mr-2 h-5 w-5" />
+                       Separate Stems Now
+                     </button>
+                   )}
 
                   {/* Processing Status */}
                   {isProcessing && (

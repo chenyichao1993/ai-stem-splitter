@@ -21,6 +21,7 @@ export function AudioPlayer({ file }: AudioPlayerProps) {
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration)
+      console.log('Audio loaded, duration:', audio.duration)
     }
 
     const handleTimeUpdate = () => {
@@ -32,14 +33,27 @@ export function AudioPlayer({ file }: AudioPlayerProps) {
       setCurrentTime(0)
     }
 
+    const handleError = (e: Event) => {
+      console.error('Audio error:', e)
+      setIsPlaying(false)
+    }
+
+    const handleCanPlay = () => {
+      console.log('Audio can play')
+    }
+
     audio.addEventListener('loadedmetadata', handleLoadedMetadata)
     audio.addEventListener('timeupdate', handleTimeUpdate)
     audio.addEventListener('ended', handleEnded)
+    audio.addEventListener('error', handleError)
+    audio.addEventListener('canplay', handleCanPlay)
 
     return () => {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
       audio.removeEventListener('timeupdate', handleTimeUpdate)
       audio.removeEventListener('ended', handleEnded)
+      audio.removeEventListener('error', handleError)
+      audio.removeEventListener('canplay', handleCanPlay)
     }
   }, [])
 
@@ -50,16 +64,33 @@ export function AudioPlayer({ file }: AudioPlayerProps) {
     audio.volume = isMuted ? 0 : volume
   }, [volume, isMuted])
 
-  const togglePlay = () => {
+  // Reset state when file changes
+  useEffect(() => {
+    setIsPlaying(false)
+    setCurrentTime(0)
+    setDuration(0)
+  }, [file])
+
+  const togglePlay = async () => {
     const audio = audioRef.current
     if (!audio) return
 
-    if (isPlaying) {
-      audio.pause()
-    } else {
-      audio.play()
+    try {
+      if (isPlaying) {
+        audio.pause()
+        setIsPlaying(false)
+      } else {
+        console.log('Attempting to play audio...')
+        await audio.play()
+        setIsPlaying(true)
+        console.log('Audio started playing')
+      }
+    } catch (error) {
+      console.error('Error playing audio:', error)
+      setIsPlaying(false)
+      // Show user-friendly error message
+      alert('无法播放此音频文件。请确保文件格式受支持且未损坏。')
     }
-    setIsPlaying(!isPlaying)
   }
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
