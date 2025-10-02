@@ -1,166 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { PlanType, AudioTrack, PlaybackState } from '@/types/interactive-demo'
+import { useState } from 'react'
+import { PlanType } from '@/types/interactive-demo'
 import { PlanToggle } from './PlanToggle'
-import { TrackControls } from './TrackControls'
-import { WaveformDisplay } from './WaveformDisplay'
-import { PlaybackControls } from './PlaybackControls'
+import { FreePlanDemo } from './FreePlanDemo'
+import { PremiumPlanDemo } from './PremiumPlanDemo'
 
 export function InteractiveDemoSection() {
   const [planType, setPlanType] = useState<PlanType>('free')
-  const [tracks, setTracks] = useState<AudioTrack[]>([])
-  const [playback, setPlayback] = useState<PlaybackState>({
-    isPlaying: false,
-    currentTime: 0,
-    duration: 30,
-    speed: 1,
-    autoScroll: true
-  })
-
-  // 初始化音轨数据
-  useEffect(() => {
-    const freeTracks: AudioTrack[] = [
-      {
-        id: 'vocals',
-        name: 'Vocals',
-        icon: 'mic',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: true,
-        waveform: [],
-        color: '#ef4444'
-      },
-      {
-        id: 'instrumental',
-        name: 'Instrumental',
-        icon: 'music',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: false,
-        waveform: [],
-        color: '#3b82f6'
-      }
-    ]
-
-    const premiumTracks: AudioTrack[] = [
-      {
-        id: 'vocals',
-        name: 'Vocals',
-        icon: 'mic',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: true,
-        waveform: [],
-        color: '#ef4444'
-      },
-      {
-        id: 'drums',
-        name: 'Drums',
-        icon: 'drum',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: false,
-        waveform: [],
-        color: '#f59e0b'
-      },
-      {
-        id: 'bass',
-        name: 'Bass',
-        icon: 'guitar',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: false,
-        waveform: [],
-        color: '#10b981'
-      },
-      {
-        id: 'guitar',
-        name: 'Guitar',
-        icon: 'guitar',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: false,
-        waveform: [],
-        color: '#8b5cf6'
-      },
-      {
-        id: 'piano',
-        name: 'Piano',
-        icon: 'piano',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: false,
-        waveform: [],
-        color: '#06b6d4'
-      },
-      {
-        id: 'other',
-        name: 'Other',
-        icon: 'music',
-        volume: 50,
-        isSolo: false,
-        isMuted: false,
-        isActive: false,
-        waveform: [],
-        color: '#6b7280'
-      }
-    ]
-
-    setTracks(planType === 'free' ? freeTracks : premiumTracks)
-  }, [planType])
-
-  // 模拟播放进度
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-
-    if (playback.isPlaying) {
-      interval = setInterval(() => {
-        setPlayback(prev => {
-          const newTime = prev.currentTime + 0.1 * prev.speed
-          if (newTime >= prev.duration) {
-            return { ...prev, currentTime: 0, isPlaying: false }
-          }
-          return { ...prev, currentTime: newTime }
-        })
-      }, 100)
-    }
-
-    return () => {
-      if (interval) clearInterval(interval)
-    }
-  }, [playback.isPlaying, playback.speed])
 
   const handlePlanChange = (plan: PlanType) => {
     setPlanType(plan)
-  }
-
-  const handleTrackUpdate = (trackId: string, updates: Partial<AudioTrack>) => {
-    setTracks(prev => prev.map(track => 
-      track.id === trackId ? { ...track, ...updates } : track
-    ))
-  }
-
-  const handleTrackClick = (trackId: string) => {
-    setTracks(prev => prev.map(track => ({
-      ...track,
-      isActive: track.id === trackId
-    })))
-  }
-
-  const handlePlaybackUpdate = (updates: Partial<PlaybackState>) => {
-    setPlayback(prev => ({ ...prev, ...updates }))
-  }
-
-  const handleTimeSeek = (time: number) => {
-    setPlayback(prev => ({ ...prev, currentTime: time }))
   }
 
   return (
@@ -180,30 +30,12 @@ export function InteractiveDemoSection() {
         {/* 计划切换 */}
         <PlanToggle planType={planType} onPlanChange={handlePlanChange} />
 
-        {/* 音频界面 */}
-        <div className="bg-gray-800 rounded-lg overflow-hidden shadow-2xl">
-          <div className="flex">
-            {/* 左侧音轨控制 */}
-            <TrackControls
-              tracks={tracks}
-              onTrackUpdate={handleTrackUpdate}
-              onTrackClick={handleTrackClick}
-            />
-
-            {/* 右侧波形显示 */}
-            <WaveformDisplay
-              tracks={tracks}
-              playback={playback}
-              onTimeSeek={handleTimeSeek}
-            />
-          </div>
-
-          {/* 底部播放控制 */}
-          <PlaybackControls
-            playback={playback}
-            onPlaybackUpdate={handlePlaybackUpdate}
-          />
-        </div>
+        {/* 音频界面 - 根据计划类型渲染不同组件 */}
+        {planType === 'free' ? (
+          <FreePlanDemo />
+        ) : (
+          <PremiumPlanDemo />
+        )}
 
         {/* 使用说明 */}
         <div className="mt-8 text-center">

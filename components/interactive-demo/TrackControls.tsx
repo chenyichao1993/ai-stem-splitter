@@ -20,6 +20,8 @@ const trackIcons = {
 }
 
 export function TrackControls({ tracks, onTrackUpdate, onTrackClick }: TrackControlsProps) {
+  // 判断是否为免费计划（只有2个音轨）
+  const isFreePlan = tracks.length === 2
   const handleVolumeChange = (trackId: string, volume: number) => {
     onTrackUpdate(trackId, { volume })
   }
@@ -50,8 +52,8 @@ export function TrackControls({ tracks, onTrackUpdate, onTrackClick }: TrackCont
   }
 
   return (
-    <div className="w-64 bg-gray-800 border-r border-gray-700 p-4">
-      <div className="space-y-3">
+    <div className="w-64 bg-gray-800 border-r border-gray-700 p-3">
+      <div className="space-y-2">
         {tracks.map((track) => {
           const Icon = trackIcons[track.id as keyof typeof trackIcons] || Music
           
@@ -59,16 +61,17 @@ export function TrackControls({ tracks, onTrackUpdate, onTrackClick }: TrackCont
             <div
               key={track.id}
               className={`
-                p-3 rounded-lg cursor-pointer transition-all duration-200
+                p-2 rounded-lg cursor-pointer transition-all duration-200
                 ${track.isActive 
                   ? 'bg-blue-600 border border-blue-500' 
                   : 'bg-gray-700 hover:bg-gray-600 border border-transparent'
                 }
               `}
+              style={{ minHeight: isFreePlan ? '120px' : '60px' }}
               onClick={() => onTrackClick(track.id)}
             >
               {/* 音轨标题和图标 */}
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
                   <Icon className="h-4 w-4 text-gray-300" />
                   <span className="text-sm font-medium text-white capitalize">
@@ -112,7 +115,7 @@ export function TrackControls({ tracks, onTrackUpdate, onTrackClick }: TrackCont
               </div>
 
               {/* 音量滑块 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400">Volume</span>
                   <span className="text-xs text-gray-300">{track.volume}</span>

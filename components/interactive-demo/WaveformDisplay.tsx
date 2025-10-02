@@ -12,6 +12,9 @@ interface WaveformDisplayProps {
 export function WaveformDisplay({ tracks, playback, onTimeSeek }: WaveformDisplayProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  
+  // 判断是否为免费计划（只有2个音轨）
+  const isFreePlan = tracks.length === 2
 
   // 生成模拟波形数据
   const generateWaveform = (length: number, intensity: number = 0.5) => {
@@ -40,7 +43,8 @@ export function WaveformDisplay({ tracks, playback, onTimeSeek }: WaveformDispla
     canvas.height = rect.height
 
     const { width, height } = canvas
-    const trackHeight = height / tracks.length
+    // 免费计划：每个音轨120px高度，付费计划：每个音轨60px高度
+    const trackHeight = isFreePlan ? 120 : Math.max(60, height / tracks.length)
     const timeWidth = width / playback.duration
 
     // 清空画布
@@ -163,7 +167,7 @@ export function WaveformDisplay({ tracks, playback, onTimeSeek }: WaveformDispla
         ref={canvasRef}
         onClick={handleCanvasClick}
         className="w-full h-full cursor-pointer"
-        style={{ minHeight: '400px' }}
+        style={{ minHeight: '267px' }}
       />
     </div>
   )
