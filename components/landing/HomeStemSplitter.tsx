@@ -214,8 +214,42 @@ export function HomeStemSplitter() {
                     </button>
                   </div>
 
-                  {/* Audio Player */}
-                  <AudioPlayer file={uploadedFile} />
+                   {/* Audio Player */}
+                   <AudioPlayer file={uploadedFile} />
+
+                   {/* Upload New File Button */}
+                   <button
+                     onClick={() => {
+                       // Trigger file input click
+                       const input = document.createElement('input')
+                       input.type = 'file'
+                       input.accept = 'audio/*,.mp3,.mp4,.wav,.flac,.m4a,.aac'
+                       input.multiple = false
+                       input.onchange = (e) => {
+                         const file = (e.target as HTMLInputElement).files?.[0]
+                         if (file) {
+                           const validation = validateAudioFile(file)
+                           if (!validation.valid) {
+                             toast.error(validation.error || 'Invalid file')
+                             setError(validation.error || 'Invalid file')
+                             return
+                           }
+                           
+                           setUploadedFile(file)
+                           setSeparatedStems(null)
+                           setError(null)
+                           setProcessingProgress(0)
+                           setIsProcessing(false)
+                           toast.success('New file uploaded successfully!')
+                         }
+                       }
+                       input.click()
+                     }}
+                     className="w-full btn-secondary text-lg py-3 flex items-center justify-center"
+                   >
+                     <Upload className="mr-2 h-5 w-5" />
+                     Upload New File
+                   </button>
 
                    {/* Process Button */}
                    {!isProcessing && !separatedStems && (
