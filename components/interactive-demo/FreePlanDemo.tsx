@@ -336,21 +336,32 @@ export function FreePlanDemo() {
               auto-scroll
             </button>
 
-            {/* Zoom Controls */}
+            {/* Zoom Controls - 按照图2 Gaudio Studio样式 */}
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => handlePlaybackUpdate({ zoomLevel: Math.max(0.5, playback.zoomLevel - 0.5) })}
                 className="p-1 rounded bg-gray-600 hover:bg-gray-500 text-gray-400 hover:text-white transition-colors"
-                title="缩小"
+                title="Zoom Out"
               >
-                <span className="text-sm">Q</span>
+                {/* 放大镜图标 + 减号 - 居中且细线条 */}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                  <line x1="8" y1="11" x2="14" y2="11" strokeWidth="2" stroke="currentColor"></line>
+                </svg>
               </button>
               <button
                 onClick={() => handlePlaybackUpdate({ zoomLevel: Math.min(4, playback.zoomLevel + 0.5) })}
                 className="p-1 rounded bg-gray-600 hover:bg-gray-500 text-gray-400 hover:text-white transition-colors"
-                title="放大"
+                title="Zoom In"
               >
-                <span className="text-sm">Q+</span>
+                {/* 放大镜图标 + 加号 - 居中且细线条 */}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                  <line x1="8" y1="11" x2="14" y2="11" strokeWidth="2" stroke="currentColor"></line>
+                  <line x1="11" y1="8" x2="11" y2="14" strokeWidth="2" stroke="currentColor"></line>
+                </svg>
               </button>
             </div>
           </div>
