@@ -18,6 +18,7 @@ export interface PlaybackState {
   duration: number
   speed: number
   autoScroll: boolean
+  zoomLevel: number
 }
 
 export interface WaveformData {
