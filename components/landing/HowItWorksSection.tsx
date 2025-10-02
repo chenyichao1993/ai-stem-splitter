@@ -95,7 +95,7 @@ export function HowItWorksSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true }}
-          className="mt-24"
+          className="mt-24 hidden"
         >
           <div className="bg-gray-50 rounded-2xl p-8 lg:p-12">
             <div className="text-center mb-8">
