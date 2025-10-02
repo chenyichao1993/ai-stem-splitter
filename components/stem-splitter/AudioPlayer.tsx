@@ -209,16 +209,16 @@ export function AudioPlayer({ file }: AudioPlayerProps) {
       {playbackError && (
         <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-sm text-yellow-700 mb-3">
-            <strong>播放提示：</strong>此音频文件可能使用了浏览器不支持的编码格式。建议尝试MP3或WAV格式的文件。
+            <strong>Playback Notice:</strong> This audio file may use an encoding format not supported by the browser. We recommend trying MP3 or WAV format files.
           </p>
           <div className="text-xs text-yellow-600">
-            <strong>备用播放器：</strong>
+            <strong>Alternative Player:</strong>
             <audio 
               src={URL.createObjectURL(file)} 
               controls 
               className="w-full mt-2"
             >
-              您的浏览器不支持音频播放。
+              Your browser does not support audio playback.
             </audio>
           </div>
         </div>
