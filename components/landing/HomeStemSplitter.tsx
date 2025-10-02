@@ -63,6 +63,7 @@ export function HomeStemSplitter() {
     piano: { name: string; url: string; size: number }
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [playingStem, setPlayingStem] = useState<string | null>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
@@ -142,6 +143,24 @@ export function HomeStemSplitter() {
   const handleDownloadAll = () => {
     toast.success('Downloading all stems...')
     // Implement actual download logic here
+  }
+
+  const handlePlayStem = (stemType: string) => {
+    if (playingStem === stemType) {
+      // Stop playing
+      setPlayingStem(null)
+      toast.success(`${stemType} playback stopped`)
+    } else {
+      // Start playing
+      setPlayingStem(stemType)
+      toast.success(`Playing ${stemType}...`)
+      
+      // Simulate playback duration (3 seconds for demo)
+      setTimeout(() => {
+        setPlayingStem(null)
+        toast.success(`${stemType} playback completed`)
+      }, 3000)
+    }
   }
 
   return (
@@ -383,6 +402,17 @@ export function HomeStemSplitter() {
                             </div>
 
                             <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => handlePlayStem(stemType)}
+                                className="p-2 text-gray-500 hover:text-primary-600 transition-colors"
+                                title={playingStem === stemType ? "Stop" : "Play"}
+                              >
+                                {playingStem === stemType ? (
+                                  <Pause className="h-4 w-4" />
+                                ) : (
+                                  <Play className="h-4 w-4" />
+                                )}
+                              </button>
                               <button
                                 onClick={() => handleDownload(stemType)}
                                 className="p-2 text-gray-500 hover:text-primary-600 transition-colors"
