@@ -51,7 +51,7 @@ export function HeroSection() {
               </button>
               <button
                 onClick={() => setIsVideoPlaying(true)}
-                className="flex items-center text-sm font-semibold leading-6 text-gray-900 hover:text-primary-600 transition-colors"
+                className="hidden flex items-center text-sm font-semibold leading-6 text-gray-900 hover:text-primary-600 transition-colors"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-gray-200 hover:ring-primary-300 transition-all">
                   <Play className="h-5 w-5 text-primary-600 ml-1" />
