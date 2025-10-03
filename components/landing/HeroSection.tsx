@@ -134,17 +134,17 @@ export function HeroSection() {
                     <Drum className="h-4 w-4 text-primary-400 mr-3" />
                     <span className="text-xs text-gray-300">Drums</span>
                     <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
-                  </div>
+                      </div>
                   <div className="flex items-center">
                     <Guitar className="h-4 w-4 text-primary-400 mr-3" />
                     <span className="text-xs text-gray-300">Bass</span>
                     <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
-                  </div>
+                      </div>
                   <div className="flex items-center">
                     <Guitar className="h-4 w-4 text-primary-400 mr-3" />
                     <span className="text-xs text-gray-300">Guitar</span>
                     <div className="ml-auto h-2 w-2 rounded-full bg-green-500"></div>
-                  </div>
+                    </div>
                   <div className="flex items-center">
                     <Piano className="h-4 w-4 text-primary-400 mr-3" />
                     <span className="text-xs text-gray-300">Piano</span>

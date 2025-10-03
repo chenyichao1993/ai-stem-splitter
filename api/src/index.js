@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
+const compression = require('compression');
 const { v4: uuidv4 } = require('uuid');
 const { supabase, BUCKET_NAME } = require('./config/supabase');
 require('dotenv').config();
@@ -9,8 +10,21 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // 中间件
-app.use(cors());
-app.use(express.json());
+app.use(compression()); // 启用gzip压缩
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// 缓存中间件
+const cacheMiddleware = (duration) => {
+  return (req, res, next) => {
+    res.set('Cache-Control', `public, max-age=${duration}, s-maxage=${duration}`);
+    next();
+  };
+};
 
 // 内存存储
 const storage = multer.memoryStorage();
@@ -22,11 +36,12 @@ const upload = multer({
 });
 
 // 健康检查
-app.get('/health', (req, res) => {
+app.get('/health', cacheMiddleware(60), (req, res) => {
   res.json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
-    supabase: 'connected'
+    supabase: 'connected',
+    version: process.env.npm_package_version || '1.0.0'
   });
 });
 
