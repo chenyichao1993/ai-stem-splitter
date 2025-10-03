@@ -1,4 +1,5 @@
 // 自动清理过期文件脚本
+require('dotenv').config({ path: '../env.local' });
 const { supabase } = require('../src/config/supabase');
 const { deleteFromCloudinary } = require('../src/utils/cloudinary');
 
