@@ -182,20 +182,44 @@ app.post('/api/process', async (req, res) => {
           .eq('id', jobId);
       }
 
-      // 模拟完成
-      const stems = ['vocals', 'drums', 'bass', 'guitar', 'piano'];
-      const stemData = [];
+      // 真实音频分离处理
+      const AudioSeparationService = require('./services/audio-separation');
+      const separationService = new AudioSeparationService();
+      
+      // 获取原始音频文件
+      const { data: audioFileData, error: audioError } = await supabase
+        .from('audio_files')
+        .select('storage_url, file_size')
+        .eq('id', fileId)
+        .single();
+      
+      if (audioError) {
+        throw new Error('Failed to fetch audio file');
+      }
 
-      for (const stemType of stems) {
+      // 下载音频文件
+      const audioResponse = await fetch(audioFileData.storage_url);
+      const audioBuffer = Buffer.from(await audioResponse.arrayBuffer());
+
+      // 执行音频分离
+      const separationResult = await separationService.separateAudio(audioBuffer, {
+        service: 'lalalai' // 可以配置使用哪个服务
+      });
+
+      const stemData = [];
+      const stemTypes = Object.keys(separationResult);
+
+      for (const stemType of stemTypes) {
         const stemId = uuidv4();
         const stemFileName = `${jobId}_${stemType}.mp3`;
-        const stemPath = `stems/${jobId}/${stemFileName}`;
         
-        // 模拟创建分离文件（实际应该调用AI引擎）
-        const mockBuffer = Buffer.from('mock audio data');
+        // 获取分离后的音频数据
+        const stemUrl = separationResult[stemType];
+        const stemResponse = await fetch(stemUrl);
+        const stemBuffer = Buffer.from(await stemResponse.arrayBuffer());
         
         // 上传到Cloudinary
-        const stemUploadResult = await uploadToCloudinary(mockBuffer, {
+        const stemUploadResult = await uploadToCloudinary(stemBuffer, {
           resource_type: 'auto',
           folder: 'stem-splitter/stems',
           public_id: `${jobId}_${stemType}`
@@ -212,7 +236,7 @@ app.post('/api/process', async (req, res) => {
               job_id: jobId,
               stem_type: stemType,
               file_name: stemFileName,
-              file_size: mockBuffer.length,
+              file_size: stemBuffer.length,
               storage_path: stemCloudinaryData.public_id,
               storage_url: stemCloudinaryData.secure_url,
               cloudinary_public_id: stemCloudinaryData.public_id,
