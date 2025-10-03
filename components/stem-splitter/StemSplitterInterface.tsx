@@ -34,6 +34,7 @@ export function StemSplitterInterface() {
   const [processingProgress, setProcessingProgress] = useState(0)
   const [separatedStems, setSeparatedStems] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
+  const [fileExpiresAt, setFileExpiresAt] = useState<string | null>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
@@ -82,7 +83,12 @@ export function StemSplitterInterface() {
               guitar: { name: 'Guitar', url: '#', size: 1792000 },
               piano: { name: 'Piano', url: '#', size: 1280000 },
             })
-            toast.success('Audio separation completed!')
+            
+            // Show expiration reminder
+            toast.success(
+              '🎉 Audio separation completed! Your files will be automatically deleted in 24 hours. Please download them soon.',
+              { duration: 8000 }
+            )
             return 100
           }
           return prev + Math.random() * 10
@@ -102,6 +108,25 @@ export function StemSplitterInterface() {
     setError(null)
     setProcessingProgress(0)
     setIsProcessing(false)
+    setFileExpiresAt(null)
+  }
+
+  // Calculate remaining time until expiration
+  const getRemainingTime = (expiresAt: string) => {
+    const now = new Date().getTime()
+    const expiration = new Date(expiresAt).getTime()
+    const remaining = expiration - now
+    
+    if (remaining <= 0) return 'Expired'
+    
+    const hours = Math.floor(remaining / (1000 * 60 * 60))
+    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60))
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m remaining`
+    } else {
+      return `${minutes}m remaining`
+    }
   }
 
   const handleDownload = (stemType: string) => {
@@ -253,11 +278,30 @@ export function StemSplitterInterface() {
 
           {/* Results */}
           {separatedStems && (
-            <SeparatedStems 
-              stems={separatedStems}
-              onDownload={handleDownload}
-              onDownloadAll={handleDownloadAll}
-            />
+            <div className="space-y-4">
+              {/* Expiration Notice */}
+              {fileExpiresAt && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-amber-600 mr-2" />
+                    <div>
+                      <p className="text-sm font-medium text-amber-800">
+                        ⏰ Files will be automatically deleted in 24 hours
+                      </p>
+                      <p className="text-xs text-amber-600 mt-1">
+                        Please download your separated audio files soon to avoid losing them.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <SeparatedStems 
+                stems={separatedStems}
+                onDownload={handleDownload}
+                onDownloadAll={handleDownloadAll}
+              />
+            </div>
           )}
         </div>
       </div>

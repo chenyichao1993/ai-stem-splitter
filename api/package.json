@@ -4,7 +4,10 @@
   "description": "Simple API for testing frontend integration",
   "main": "start-simple.js",
   "scripts": {
-    "start": "node start-simple.js"
+    "start": "node start-simple.js",
+    "cleanup": "node scripts/cleanup-expired-files.js",
+    "scheduler": "node scripts/scheduler.js",
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",

@@ -10,6 +10,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// 导入清理服务
+const { scheduler } = require('../scripts/scheduler');
+
 // 中间件
 app.use(compression()); // 启用gzip压缩
 app.use(cors({
@@ -57,6 +60,10 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     const fileExtension = req.file.originalname.split('.').pop()?.toLowerCase();
     const fileName = `${fileId}.${fileExtension}`;
     const filePath = `uploads/${fileId}/${fileName}`;
+    
+    // 设置24小时过期时间
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 24);
 
     // 上传到Cloudinary
     const uploadResult = await uploadToCloudinary(req.file.buffer, {
@@ -83,7 +90,9 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
         file_size: req.file.size,
         mime_type: req.file.mimetype,
         storage_path: cloudinaryData.public_id,
-        storage_url: cloudinaryData.secure_url
+        storage_url: cloudinaryData.secure_url,
+        cloudinary_public_id: cloudinaryData.public_id,
+        expires_at: expiresAt.toISOString()
       })
       .select()
       .single();
@@ -101,7 +110,8 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
         fileSize: req.file.size,
         mimeType: req.file.mimetype,
         storageUrl: cloudinaryData.secure_url,
-        publicId: cloudinaryData.public_id
+        publicId: cloudinaryData.public_id,
+        expiresAt: expiresAt.toISOString()
       },
       message: 'File uploaded successfully to Cloudinary'
     });
@@ -123,6 +133,18 @@ app.post('/api/process', async (req, res) => {
 
     const jobId = uuidv4();
 
+    // 获取音频文件的过期时间
+    const { data: audioFile, error: fileError } = await supabase
+      .from('audio_files')
+      .select('expires_at')
+      .eq('id', fileId)
+      .single();
+    
+    if (fileError) {
+      console.error('File fetch error:', fileError);
+      return res.status(500).json({ success: false, error: 'Failed to fetch file info' });
+    }
+
     // 创建处理任务
     const { data: jobData, error: jobError } = await supabase
       .from('processing_jobs')
@@ -132,7 +154,8 @@ app.post('/api/process', async (req, res) => {
         audio_file_id: fileId,
         status: 'pending',
         progress: 0,
-        estimated_time: 30
+        estimated_time: 30,
+        expires_at: audioFile.expires_at // 使用相同的过期时间
       })
       .select()
       .single();
@@ -171,17 +194,15 @@ app.post('/api/process', async (req, res) => {
         // 模拟创建分离文件（实际应该调用AI引擎）
         const mockBuffer = Buffer.from('mock audio data');
         
-        const { data: stemUploadData, error: stemUploadError } = await supabase.storage
-          .from(BUCKET_NAME)
-          .upload(stemPath, mockBuffer, {
-            contentType: 'audio/mpeg',
-            upsert: false
-          });
+        // 上传到Cloudinary
+        const stemUploadResult = await uploadToCloudinary(mockBuffer, {
+          resource_type: 'auto',
+          folder: 'stem-splitter/stems',
+          public_id: `${jobId}_${stemType}`
+        });
 
-        if (!stemUploadError) {
-          const { data: stemUrlData } = supabase.storage
-            .from(BUCKET_NAME)
-            .getPublicUrl(stemPath);
+        if (stemUploadResult.success) {
+          const { data: stemCloudinaryData } = stemUploadResult;
 
           // 保存分离音轨信息
           await supabase
@@ -192,12 +213,14 @@ app.post('/api/process', async (req, res) => {
               stem_type: stemType,
               file_name: stemFileName,
               file_size: mockBuffer.length,
-              storage_path: stemPath,
-              storage_url: stemUrlData.publicUrl
+              storage_path: stemCloudinaryData.public_id,
+              storage_url: stemCloudinaryData.secure_url,
+              cloudinary_public_id: stemCloudinaryData.public_id,
+              expires_at: audioFile.expires_at // 使用相同的过期时间
             });
 
           stemData.push({
-            [stemType]: stemUrlData.publicUrl
+            [stemType]: stemCloudinaryData.secure_url
           });
         }
       }
@@ -329,4 +352,12 @@ app.listen(PORT, () => {
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
   console.log(`🔗 API base URL: http://localhost:${PORT}/api`);
   console.log(`🗄️ Supabase connected: ${supabase.supabaseUrl}`);
+  
+  // 启动自动清理服务
+  if (process.env.NODE_ENV === 'production') {
+    console.log('🧹 Starting automatic cleanup scheduler...');
+    scheduler.start();
+  } else {
+    console.log('🔧 Development mode: Cleanup scheduler disabled');
+  }
 });

@@ -22,8 +22,11 @@ CREATE TABLE audio_files (
     file_name VARCHAR(255) NOT NULL,
     file_size BIGINT NOT NULL,
     mime_type VARCHAR(100) NOT NULL,
-    storage_path VARCHAR(500) NOT NULL, -- Supabase Storage路径
-    storage_url VARCHAR(500) NOT NULL,  -- 公开访问URL
+    storage_path VARCHAR(500) NOT NULL, -- Cloudinary public_id
+    storage_url VARCHAR(500) NOT NULL,  -- Cloudinary secure_url
+    cloudinary_public_id VARCHAR(255),  -- Cloudinary public_id
+    expires_at TIMESTAMP WITH TIME ZONE, -- 过期时间（24小时后）
+    is_expired BOOLEAN DEFAULT FALSE,   -- 是否已过期
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -38,6 +41,7 @@ CREATE TABLE processing_jobs (
     error_message TEXT,
     estimated_time INTEGER, -- 预计处理时间（秒）
     actual_time INTEGER,    -- 实际处理时间（秒）
+    expires_at TIMESTAMP WITH TIME ZONE, -- 过期时间（24小时后）
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     completed_at TIMESTAMP WITH TIME ZONE
@@ -50,8 +54,11 @@ CREATE TABLE separated_stems (
     stem_type VARCHAR(50) NOT NULL CHECK (stem_type IN ('vocals', 'drums', 'bass', 'guitar', 'piano')),
     file_name VARCHAR(255) NOT NULL,
     file_size BIGINT NOT NULL,
-    storage_path VARCHAR(500) NOT NULL,
-    storage_url VARCHAR(500) NOT NULL,
+    storage_path VARCHAR(500) NOT NULL, -- Cloudinary public_id
+    storage_url VARCHAR(500) NOT NULL,  -- Cloudinary secure_url
+    cloudinary_public_id VARCHAR(255),  -- Cloudinary public_id
+    expires_at TIMESTAMP WITH TIME ZONE, -- 过期时间（24小时后）
+    is_expired BOOLEAN DEFAULT FALSE,   -- 是否已过期
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -68,9 +75,14 @@ CREATE TABLE user_usage (
 
 -- 创建索引以提高查询性能
 CREATE INDEX idx_audio_files_user_id ON audio_files(user_id);
+CREATE INDEX idx_audio_files_expires_at ON audio_files(expires_at);
+CREATE INDEX idx_audio_files_cloudinary_id ON audio_files(cloudinary_public_id);
 CREATE INDEX idx_processing_jobs_user_id ON processing_jobs(user_id);
 CREATE INDEX idx_processing_jobs_status ON processing_jobs(status);
+CREATE INDEX idx_processing_jobs_expires_at ON processing_jobs(expires_at);
 CREATE INDEX idx_separated_stems_job_id ON separated_stems(job_id);
+CREATE INDEX idx_separated_stems_expires_at ON separated_stems(expires_at);
+CREATE INDEX idx_separated_stems_cloudinary_id ON separated_stems(cloudinary_public_id);
 CREATE INDEX idx_user_usage_user_date ON user_usage(user_id, date);
 
 -- 创建更新时间触发器
