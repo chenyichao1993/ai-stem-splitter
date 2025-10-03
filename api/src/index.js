@@ -52,9 +52,18 @@ app.get('/health', cacheMiddleware(60), (req, res) => {
 // 文件上传
 app.post('/api/upload', upload.single('audio'), async (req, res) => {
   try {
+    console.log('📁 Upload request received');
+    
     if (!req.file) {
+      console.log('❌ No file uploaded');
       return res.status(400).json({ success: false, error: 'No file uploaded' });
     }
+
+    console.log('📄 File details:', {
+      originalname: req.file.originalname,
+      size: req.file.size,
+      mimetype: req.file.mimetype
+    });
 
     const fileId = uuidv4();
     const fileExtension = req.file.originalname.split('.').pop()?.toLowerCase();
@@ -65,6 +74,8 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 24);
 
+    console.log('☁️ Starting Cloudinary upload...');
+    
     // 上传到Cloudinary
     const uploadResult = await uploadToCloudinary(req.file.buffer, {
       resource_type: 'auto',
@@ -73,12 +84,15 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     });
 
     if (!uploadResult.success) {
-      console.error('Cloudinary upload error:', uploadResult.error);
-      return res.status(500).json({ success: false, error: 'Failed to upload file' });
+      console.error('❌ Cloudinary upload error:', uploadResult.error);
+      return res.status(500).json({ success: false, error: 'Failed to upload file', details: uploadResult.error });
     }
 
+    console.log('✅ Cloudinary upload successful');
     const { data: cloudinaryData } = uploadResult;
 
+    console.log('💾 Saving file info to database...');
+    
     // 保存文件信息到数据库
     const { data: fileData, error: dbError } = await supabase
       .from('audio_files')
@@ -98,9 +112,11 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
       .single();
 
     if (dbError) {
-      console.error('Database error:', dbError);
-      return res.status(500).json({ success: false, error: 'Failed to save file info' });
+      console.error('❌ Database error:', dbError);
+      return res.status(500).json({ success: false, error: 'Failed to save file info', details: dbError.message });
     }
+
+    console.log('✅ File info saved to database successfully');
 
     res.json({
       success: true,
@@ -117,8 +133,14 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
+    console.error('❌ Upload error:', error);
+    console.error('❌ Error stack:', error.stack);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Internal server error',
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
