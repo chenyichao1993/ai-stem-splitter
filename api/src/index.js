@@ -122,6 +122,29 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
   }
 });
 
+// 检查文件是否存在
+app.get('/api/check-file/:fileId', async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    
+    const { data: audioFile, error: fileError } = await supabase
+      .from('audio_files')
+      .select('*')
+      .eq('id', fileId)
+      .single();
+    
+    if (fileError) {
+      console.error('File check error:', fileError);
+      return res.status(404).json({ success: false, error: 'File not found', details: fileError.message });
+    }
+    
+    res.json({ success: true, data: audioFile });
+  } catch (error) {
+    console.error('Check file error:', error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
 // 开始处理
 app.post('/api/process', async (req, res) => {
   try {
