@@ -122,6 +122,11 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
   }
 });
 
+// 简单测试端点
+app.get('/api/test', (req, res) => {
+  res.json({ success: true, message: 'Test endpoint working', timestamp: new Date().toISOString() });
+});
+
 // 检查文件是否存在
 app.get('/api/check-file/:fileId', async (req, res) => {
   try {
