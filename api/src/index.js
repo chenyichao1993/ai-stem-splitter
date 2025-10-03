@@ -4,6 +4,7 @@ const multer = require('multer');
 const compression = require('compression');
 const { v4: uuidv4 } = require('uuid');
 const { supabase, BUCKET_NAME } = require('./config/supabase');
+const { uploadToCloudinary, deleteFromCloudinary } = require('./utils/cloudinary');
 require('dotenv').config();
 
 const app = express();
@@ -57,23 +58,19 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     const fileName = `${fileId}.${fileExtension}`;
     const filePath = `uploads/${fileId}/${fileName}`;
 
-    // 上传到Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from(BUCKET_NAME)
-      .upload(filePath, req.file.buffer, {
-        contentType: req.file.mimetype,
-        upsert: false
-      });
+    // 上传到Cloudinary
+    const uploadResult = await uploadToCloudinary(req.file.buffer, {
+      resource_type: 'auto',
+      folder: 'stem-splitter/uploads',
+      public_id: fileId
+    });
 
-    if (uploadError) {
-      console.error('Upload error:', uploadError);
+    if (!uploadResult.success) {
+      console.error('Cloudinary upload error:', uploadResult.error);
       return res.status(500).json({ success: false, error: 'Failed to upload file' });
     }
 
-    // 获取公开URL
-    const { data: urlData } = supabase.storage
-      .from(BUCKET_NAME)
-      .getPublicUrl(filePath);
+    const { data: cloudinaryData } = uploadResult;
 
     // 保存文件信息到数据库
     const { data: fileData, error: dbError } = await supabase
@@ -85,8 +82,8 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
         file_name: fileName,
         file_size: req.file.size,
         mime_type: req.file.mimetype,
-        storage_path: filePath,
-        storage_url: urlData.publicUrl
+        storage_path: cloudinaryData.public_id,
+        storage_url: cloudinaryData.secure_url
       })
       .select()
       .single();
@@ -103,9 +100,10 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
         fileName: req.file.originalname,
         fileSize: req.file.size,
         mimeType: req.file.mimetype,
-        storageUrl: urlData.publicUrl
+        storageUrl: cloudinaryData.secure_url,
+        publicId: cloudinaryData.public_id
       },
-      message: 'File uploaded successfully'
+      message: 'File uploaded successfully to Cloudinary'
     });
 
   } catch (error) {
