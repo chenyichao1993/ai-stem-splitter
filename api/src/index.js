@@ -308,6 +308,14 @@ app.post('/api/process', async (req, res) => {
           throw new Error('Original file is not a valid audio file');
         }
         
+        // 检查是否为HTML页面
+        const textContent = originalBuffer.toString('utf8', 0, 200);
+        if (textContent.includes('<!doctype html>') || textContent.includes('<html')) {
+          console.error('❌ Original file is HTML page, not audio file');
+          console.error('❌ HTML preview:', textContent);
+          throw new Error('Original file is HTML page, not audio file');
+        }
+        
         // 检查文件头是否为音频格式（更宽松的检查）
         const fileHeader = originalBuffer.slice(0, 4);
         const isMP3 = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
@@ -529,6 +537,16 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       // 不阻止下载，继续处理
     } else {
       console.log('✅ Valid audio file header detected');
+    }
+    
+    // 最终检查：确保不是HTML页面
+    if (textContent.includes('<!doctype html>') || textContent.includes('<html')) {
+      console.error('❌ Downloaded content is HTML page, not audio file');
+      console.error('❌ HTML preview:', textContent);
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Downloaded file is HTML page, not audio file. Please try processing again.' 
+      });
     }
     
     // 设置响应头 - 确保正确的音频文件头
