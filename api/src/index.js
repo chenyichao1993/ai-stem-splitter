@@ -269,8 +269,17 @@ app.post('/api/process', async (req, res) => {
         
         // 下载原始音频文件内容
         console.log('📥 Downloading original file for stem:', stemType);
+        console.log('📥 Original file URL:', audioFileData.storage_url);
+        
         const originalResponse = await fetch(audioFileData.storage_url);
+        console.log('📥 Original file response:', {
+          status: originalResponse.status,
+          contentType: originalResponse.headers.get('content-type'),
+          contentLength: originalResponse.headers.get('content-length')
+        });
+        
         const originalBuffer = Buffer.from(await originalResponse.arrayBuffer());
+        console.log('📥 Original file buffer size:', originalBuffer.length);
         
         // 创建模拟的分离音轨（使用原始音频作为占位符）
         const stemUploadResult = await uploadToCloudinary(originalBuffer, {
@@ -278,6 +287,12 @@ app.post('/api/process', async (req, res) => {
           folder: 'stem-splitter/stems',
           public_id: `${jobId}_${stemType}`,
           quality: 'auto'
+        });
+        
+        console.log('📤 Stem upload result:', {
+          success: stemUploadResult.success,
+          publicId: stemUploadResult.data?.public_id,
+          secureUrl: stemUploadResult.data?.secure_url
         });
 
         if (stemUploadResult.success) {
