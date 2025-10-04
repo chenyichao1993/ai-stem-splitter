@@ -396,23 +396,24 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Stem not found' });
     }
 
-    // 从Supabase Storage下载文件
-    const { data: fileData, error: downloadError } = await supabase.storage
-      .from(BUCKET_NAME)
-      .download(stem.storage_path);
-
-    if (downloadError) {
-      console.error('Download error:', downloadError);
-      return res.status(500).json({ success: false, error: 'Failed to download file' });
+    // 从Cloudinary下载文件
+    console.log('📥 Downloading file from Cloudinary:', stem.storage_url);
+    
+    const response = await fetch(stem.storage_url);
+    
+    if (!response.ok) {
+      console.error('Cloudinary download error:', response.status, response.statusText);
+      return res.status(500).json({ success: false, error: 'Failed to download file from Cloudinary' });
     }
 
+    const buffer = await response.arrayBuffer();
+    
     // 设置响应头
     res.setHeader('Content-Disposition', `attachment; filename="${stem.file_name}"`);
     res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Content-Length', stem.file_size);
+    res.setHeader('Content-Length', buffer.byteLength);
 
     // 发送文件
-    const buffer = await fileData.arrayBuffer();
     res.send(Buffer.from(buffer));
 
   } catch (error) {
