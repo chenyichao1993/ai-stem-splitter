@@ -162,6 +162,14 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Simple test working' });
 });
 
+// 测试下载端点
+app.get('/api/test-download', (req, res) => {
+  console.log('🧪 Test download endpoint called');
+  res.setHeader('Content-Type', 'audio/mpeg');
+  res.setHeader('Content-Disposition', 'attachment; filename="test.mp3"');
+  res.send('This is a test audio file');
+});
+
 // 检查文件是否存在
 app.get('/api/check-file/:fileId', async (req, res) => {
   try {
