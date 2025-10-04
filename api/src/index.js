@@ -416,7 +416,18 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       return res.status(500).json({ success: false, error: 'Failed to download file from Cloudinary' });
     }
 
+    console.log('✅ Cloudinary response received:', {
+      status: response.status,
+      contentType: response.headers.get('content-type'),
+      contentLength: response.headers.get('content-length')
+    });
+
     const buffer = await response.arrayBuffer();
+    
+    console.log('✅ File buffer created:', {
+      bufferSize: buffer.byteLength,
+      fileName: stem.file_name
+    });
     
     // 设置响应头
     res.setHeader('Content-Disposition', `attachment; filename="${stem.file_name}"`);
