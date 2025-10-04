@@ -399,8 +399,11 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
   try {
     const { jobId, stemType } = req.params;
     
+    console.log('🎵 Download request received:', { jobId, stemType });
+    
     const allowedStemTypes = ['vocals', 'drums', 'bass', 'guitar', 'piano'];
     if (!allowedStemTypes.includes(stemType)) {
+      console.log('❌ Invalid stem type:', stemType);
       return res.status(400).json({ success: false, error: 'Invalid stem type' });
     }
 
@@ -429,18 +432,36 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
     // 从Cloudinary下载文件
     console.log('📥 Downloading file from Cloudinary:', stem.storage_url);
     
-    const response = await fetch(stem.storage_url);
+    const response = await fetch(stem.storage_url, {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
     
     if (!response.ok) {
-      console.error('Cloudinary download error:', response.status, response.statusText);
+      console.error('❌ Cloudinary download error:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('❌ Error response body:', errorText);
       return res.status(500).json({ success: false, error: 'Failed to download file from Cloudinary' });
     }
 
+    const contentType = response.headers.get('content-type');
+    const contentLength = response.headers.get('content-length');
+    
     console.log('✅ Cloudinary response received:', {
       status: response.status,
-      contentType: response.headers.get('content-type'),
-      contentLength: response.headers.get('content-length')
+      contentType,
+      contentLength
     });
+
+    // 检查响应内容类型
+    if (!contentType || !contentType.includes('audio') && !contentType.includes('application/octet-stream')) {
+      console.error('❌ Unexpected content type:', contentType);
+      const responseText = await response.text();
+      console.error('❌ Response body preview:', responseText.substring(0, 200));
+      return res.status(500).json({ success: false, error: 'Invalid file type received from Cloudinary' });
+    }
 
     const buffer = await response.arrayBuffer();
     
@@ -449,17 +470,26 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       fileName: stem.file_name
     });
     
-    // 设置响应头
+    // 设置响应头 - 确保正确的音频文件头
     res.setHeader('Content-Disposition', `attachment; filename="${stem.file_name}"`);
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Content-Length', buffer.byteLength);
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Pragma', 'no-cache');
+    
+    console.log('📤 Sending file to client:', {
+      fileName: stem.file_name,
+      size: buffer.byteLength,
+      contentType: 'audio/mpeg'
+    });
 
     // 发送文件
     res.send(Buffer.from(buffer));
 
   } catch (error) {
-    console.error('Download error:', error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
+    console.error('❌ Download error:', error);
+    console.error('❌ Error stack:', error.stack);
+    res.status(500).json({ success: false, error: 'Internal server error', details: error.message });
   }
 });
 
