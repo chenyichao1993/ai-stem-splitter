@@ -267,8 +267,13 @@ app.post('/api/process', async (req, res) => {
         const stemId = uuidv4();
         const stemFileName = `${jobId}_${stemType}.mp3`;
         
+        // 下载原始音频文件内容
+        console.log('📥 Downloading original file for stem:', stemType);
+        const originalResponse = await fetch(audioFileData.storage_url);
+        const originalBuffer = Buffer.from(await originalResponse.arrayBuffer());
+        
         // 创建模拟的分离音轨（使用原始音频作为占位符）
-        const stemUploadResult = await uploadToCloudinary(audioFileData.storage_url, {
+        const stemUploadResult = await uploadToCloudinary(originalBuffer, {
           resource_type: 'auto',
           folder: 'stem-splitter/stems',
           public_id: `${jobId}_${stemType}`,
