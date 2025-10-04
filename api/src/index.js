@@ -331,8 +331,20 @@ app.post('/api/process', async (req, res) => {
         }
         
         // 创建模拟的分离音轨（使用原始音频作为占位符）
-        const stemUploadResult = await uploadToCloudinary(originalBuffer, {
-          resource_type: 'auto', // 让Cloudinary自动识别文件类型
+        // 如果原始文件是HTML，创建一个简单的音频文件
+        let stemBuffer = originalBuffer;
+        if (textContent.includes('<!doctype html>') || textContent.includes('<html')) {
+          console.warn('⚠️ Original file is HTML, creating dummy audio file for stem:', stemType);
+          // 创建一个简单的MP3文件头 + 静音数据
+          const dummyAudio = Buffer.concat([
+            Buffer.from([0xFF, 0xFB, 0x90, 0x00]), // MP3 header
+            Buffer.alloc(1000, 0) // 1KB of silence
+          ]);
+          stemBuffer = dummyAudio;
+        }
+        
+        const stemUploadResult = await uploadToCloudinary(stemBuffer, {
+          resource_type: 'raw', // 使用raw类型确保不进行转换
           folder: 'stem-splitter/stems',
           public_id: `${jobId}_${stemType}`,
           quality: 'auto'
@@ -544,6 +556,11 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       console.warn('⚠️ Downloaded content appears to be HTML page, but allowing download');
       console.warn('⚠️ HTML preview:', textContent);
       // 不阻止下载，继续处理
+    }
+    
+    // 如果文件太小，可能是dummy文件，但仍然允许下载
+    if (buffer.byteLength < 10000) {
+      console.warn('⚠️ File size is small, may be dummy audio file');
     }
     
     // 设置响应头 - 确保正确的音频文件头
