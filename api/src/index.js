@@ -279,15 +279,44 @@ app.post('/api/process', async (req, res) => {
         console.log('📥 Downloading original file for stem:', stemType);
         console.log('📥 Original file URL:', audioFileData.storage_url);
         
-        const originalResponse = await fetch(audioFileData.storage_url);
+        const originalResponse = await fetch(audioFileData.storage_url, {
+          method: 'GET',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          }
+        });
+        
         console.log('📥 Original file response:', {
           status: originalResponse.status,
           contentType: originalResponse.headers.get('content-type'),
           contentLength: originalResponse.headers.get('content-length')
         });
         
+        if (!originalResponse.ok) {
+          throw new Error(`Failed to download original file: ${originalResponse.status} ${originalResponse.statusText}`);
+        }
+        
         const originalBuffer = Buffer.from(await originalResponse.arrayBuffer());
         console.log('📥 Original file buffer size:', originalBuffer.length);
+        
+        // 验证下载的内容是否为音频文件
+        const contentType = originalResponse.headers.get('content-type');
+        if (!contentType || (!contentType.includes('audio') && !contentType.includes('application/octet-stream'))) {
+          console.error('❌ Original file is not audio:', contentType);
+          const preview = originalBuffer.toString('utf8', 0, 200);
+          console.error('❌ Content preview:', preview);
+          throw new Error('Original file is not a valid audio file');
+        }
+        
+        // 检查文件头是否为音频格式
+        const fileHeader = originalBuffer.slice(0, 4);
+        const isAudioFile = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
+        if (!isAudioFile) {
+          console.error('❌ File does not have valid audio header');
+          const preview = originalBuffer.toString('utf8', 0, 200);
+          console.error('❌ Content preview:', preview);
+          throw new Error('File does not have valid audio header');
+        }
         
         // 创建模拟的分离音轨（使用原始音频作为占位符）
         const stemUploadResult = await uploadToCloudinary(originalBuffer, {
@@ -463,20 +492,38 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       contentLength
     });
 
-    // 检查响应内容类型
-    if (!contentType || !contentType.includes('audio') && !contentType.includes('application/octet-stream')) {
-      console.error('❌ Unexpected content type:', contentType);
-      const responseText = await response.text();
-      console.error('❌ Response body preview:', responseText.substring(0, 200));
-      return res.status(500).json({ success: false, error: 'Invalid file type received from Cloudinary' });
-    }
-
     const buffer = await response.arrayBuffer();
     
     console.log('✅ File buffer created:', {
       bufferSize: buffer.byteLength,
       fileName: stem.file_name
     });
+    
+    // 验证文件内容是否为音频
+    const bufferObj = Buffer.from(buffer);
+    
+    // 检查是否为HTML页面
+    const textContent = bufferObj.toString('utf8', 0, 200);
+    if (textContent.includes('<!doctype html>') || textContent.includes('<html')) {
+      console.error('❌ Downloaded content is HTML page, not audio file');
+      console.error('❌ HTML preview:', textContent);
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Downloaded file is not a valid audio file. Please try processing again.' 
+      });
+    }
+    
+    // 检查文件头是否为音频格式
+    const fileHeader = bufferObj.slice(0, 4);
+    const isAudioFile = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
+    if (!isAudioFile) {
+      console.error('❌ File does not have valid audio header');
+      console.error('❌ File header:', fileHeader.toString('hex'));
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Downloaded file is not a valid audio file. Please try processing again.' 
+      });
+    }
     
     // 设置响应头 - 确保正确的音频文件头
     res.setHeader('Content-Disposition', `attachment; filename="${stem.file_name}"`);
