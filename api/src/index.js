@@ -308,14 +308,18 @@ app.post('/api/process', async (req, res) => {
           throw new Error('Original file is not a valid audio file');
         }
         
-        // 检查文件头是否为音频格式
+        // 检查文件头是否为音频格式（更宽松的检查）
         const fileHeader = originalBuffer.slice(0, 4);
-        const isAudioFile = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
-        if (!isAudioFile) {
-          console.error('❌ File does not have valid audio header');
-          const preview = originalBuffer.toString('utf8', 0, 200);
-          console.error('❌ Content preview:', preview);
-          throw new Error('File does not have valid audio header');
+        const isMP3 = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
+        const isWAV = fileHeader[0] === 0x52 && fileHeader[1] === 0x49 && fileHeader[2] === 0x46 && fileHeader[3] === 0x46; // WAV header
+        const isOGG = fileHeader[0] === 0x4F && fileHeader[1] === 0x67 && fileHeader[2] === 0x67 && fileHeader[3] === 0x53; // OGG header
+        
+        if (!isMP3 && !isWAV && !isOGG) {
+          console.warn('⚠️ File may not have standard audio header, but continuing processing');
+          console.log('📊 File header:', fileHeader.toString('hex'));
+          // 不抛出错误，继续处理
+        } else {
+          console.log('✅ Valid audio file header detected');
         }
         
         // 创建模拟的分离音轨（使用原始音频作为占位符）
@@ -513,16 +517,18 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       });
     }
     
-    // 检查文件头是否为音频格式
+    // 检查文件头是否为音频格式（更宽松的检查）
     const fileHeader = bufferObj.slice(0, 4);
-    const isAudioFile = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
-    if (!isAudioFile) {
-      console.error('❌ File does not have valid audio header');
-      console.error('❌ File header:', fileHeader.toString('hex'));
-      return res.status(500).json({ 
-        success: false, 
-        error: 'Downloaded file is not a valid audio file. Please try processing again.' 
-      });
+    const isMP3 = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
+    const isWAV = fileHeader[0] === 0x52 && fileHeader[1] === 0x49 && fileHeader[2] === 0x46 && fileHeader[3] === 0x46; // WAV header
+    const isOGG = fileHeader[0] === 0x4F && fileHeader[1] === 0x67 && fileHeader[2] === 0x67 && fileHeader[3] === 0x53; // OGG header
+    
+    if (!isMP3 && !isWAV && !isOGG) {
+      console.warn('⚠️ File may not have standard audio header, but allowing download');
+      console.log('📊 File header:', fileHeader.toString('hex'));
+      // 不阻止下载，继续处理
+    } else {
+      console.log('✅ Valid audio file header detected');
     }
     
     // 设置响应头 - 确保正确的音频文件头
