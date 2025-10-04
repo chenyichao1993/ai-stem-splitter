@@ -7,7 +7,7 @@ async function uploadToCloudinary(buffer, options = {}) {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         {
-          resource_type: 'auto',
+          resource_type: 'raw', // 强制使用raw类型，不进行任何转换
           folder: 'stem-splitter',
           use_filename: true,
           unique_filename: true,

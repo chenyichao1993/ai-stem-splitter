@@ -86,7 +86,7 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     
     // 上传到Cloudinary
     const uploadResult = await uploadToCloudinary(req.file.buffer, {
-      resource_type: 'auto', // 让Cloudinary自动识别文件类型
+      resource_type: 'raw', // 强制使用raw类型，确保音频文件不被转换
       folder: 'stem-splitter/uploads',
       public_id: fileId
     });
