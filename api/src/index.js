@@ -385,6 +385,8 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
     }
 
     // 获取分离音轨信息
+    console.log('🔍 Searching for stem:', { jobId, stemType });
+    
     const { data: stem, error } = await supabase
       .from('separated_stems')
       .select('*')
@@ -393,8 +395,16 @@ app.get('/api/download/:jobId/:stemType', async (req, res) => {
       .single();
 
     if (error || !stem) {
-      return res.status(404).json({ success: false, error: 'Stem not found' });
+      console.error('❌ Stem not found:', { error, jobId, stemType });
+      return res.status(404).json({ success: false, error: 'Stem not found', details: error?.message });
     }
+
+    console.log('✅ Found stem:', { 
+      id: stem.id, 
+      stem_type: stem.stem_type, 
+      storage_url: stem.storage_url,
+      file_name: stem.file_name 
+    });
 
     // 从Cloudinary下载文件
     console.log('📥 Downloading file from Cloudinary:', stem.storage_url);
