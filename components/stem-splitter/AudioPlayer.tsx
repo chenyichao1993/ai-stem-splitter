@@ -121,10 +121,10 @@ export function AudioPlayer({ file }: AudioPlayerProps) {
     })
 
     try {
-      if (isPlaying) {
-        audio.pause()
+    if (isPlaying) {
+      audio.pause()
         console.log('Audio pause() called')
-      } else {
+    } else {
         console.log('Attempting to play audio...')
         console.log('Audio readyState before play:', audio.readyState)
         

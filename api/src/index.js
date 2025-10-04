@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const { supabase, BUCKET_NAME } = require('./config/supabase');
 const { uploadToCloudinary, deleteFromCloudinary } = require('./utils/cloudinary');
 const cloudinary = require('cloudinary').v2;
+const GaudioLabClient = require('./services/gaudiolab');
 require('dotenv').config();
 
 // 配置Cloudinary
@@ -236,49 +237,33 @@ app.post('/api/process', async (req, res) => {
       return res.status(500).json({ success: false, error: 'Failed to create processing job' });
     }
 
-    // 模拟处理（后续会集成真实AI引擎）
+    // 使用 GaudioLab 进行真实音频分离
     setTimeout(async () => {
-      // 更新状态为处理中
-      await supabase
-        .from('processing_jobs')
-        .update({ status: 'processing' })
-        .eq('id', jobId);
-
-      // 模拟进度更新
-      for (let progress = 10; progress <= 90; progress += 20) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+      try {
+        console.log('🎵 开始 GaudioLab 真实音频分离...');
+        
+        // 初始化 GaudioLab 客户端
+        const gaudioLab = new GaudioLabClient();
+        
+        // 更新状态为处理中
         await supabase
           .from('processing_jobs')
-          .update({ progress })
+          .update({ status: 'processing' })
           .eq('id', jobId);
-      }
 
-      // 模拟音频分离处理（临时方案）
-      console.log('🎵 Starting simulated audio separation...');
-      
-      // 获取原始音频文件信息
-      const { data: audioFileData, error: audioError } = await supabase
-        .from('audio_files')
-        .select('storage_url, file_size, original_name')
-        .eq('id', fileId)
-        .single();
-      
-      if (audioError) {
-        throw new Error('Failed to fetch audio file');
-      }
-
-      // 模拟分离的音轨类型
-      const stemTypes = ['vocals', 'drums', 'bass', 'guitar', 'piano'];
-      const stemData = [];
-
-      for (const stemType of stemTypes) {
-        const stemId = uuidv4();
-        const stemFileName = `${jobId}_${stemType}.mp3`;
+        // 获取原始音频文件信息
+        const { data: audioFileData, error: audioError } = await supabase
+          .from('audio_files')
+          .select('storage_url, file_size, original_name')
+          .eq('id', fileId)
+          .single();
         
-        // 下载原始音频文件内容
-        console.log('📥 Downloading original file for stem:', stemType);
-        console.log('📥 Original file URL:', audioFileData.storage_url);
-        
+        if (audioError) {
+          throw new Error('Failed to fetch audio file');
+        }
+
+        // 下载原始音频文件
+        console.log('📥 下载原始音频文件...');
         const originalResponse = await fetch(audioFileData.storage_url, {
           method: 'GET',
           headers: {
@@ -286,110 +271,137 @@ app.post('/api/process', async (req, res) => {
           }
         });
         
-        console.log('📥 Original file response:', {
-          status: originalResponse.status,
-          contentType: originalResponse.headers.get('content-type'),
-          contentLength: originalResponse.headers.get('content-length')
-        });
-        
         if (!originalResponse.ok) {
-          throw new Error(`Failed to download original file: ${originalResponse.status} ${originalResponse.statusText}`);
+          throw new Error(`Failed to download original file: ${originalResponse.status}`);
         }
         
         const originalBuffer = Buffer.from(await originalResponse.arrayBuffer());
-        console.log('📥 Original file buffer size:', originalBuffer.length);
-        
-        // 验证下载的内容是否为音频文件
-        const contentType = originalResponse.headers.get('content-type');
-        if (!contentType || (!contentType.includes('audio') && !contentType.includes('application/octet-stream'))) {
-          console.error('❌ Original file is not audio:', contentType);
-          const preview = originalBuffer.toString('utf8', 0, 200);
-          console.error('❌ Content preview:', preview);
-          throw new Error('Original file is not a valid audio file');
-        }
-        
-        // 检查是否为HTML页面（警告但不阻止处理）
-        const textContent = originalBuffer.toString('utf8', 0, 200);
-        if (textContent.includes('<!doctype html>') || textContent.includes('<html')) {
-          console.warn('⚠️ Original file appears to be HTML page, but continuing processing');
-          console.warn('⚠️ HTML preview:', textContent);
-          // 不抛出错误，继续处理
-        }
-        
-        // 检查文件头是否为音频格式（更宽松的检查）
-        const fileHeader = originalBuffer.slice(0, 4);
-        const isMP3 = fileHeader[0] === 0xFF && fileHeader[1] === 0xFB; // MP3 header
-        const isWAV = fileHeader[0] === 0x52 && fileHeader[1] === 0x49 && fileHeader[2] === 0x46 && fileHeader[3] === 0x46; // WAV header
-        const isOGG = fileHeader[0] === 0x4F && fileHeader[1] === 0x67 && fileHeader[2] === 0x67 && fileHeader[3] === 0x53; // OGG header
-        
-        if (!isMP3 && !isWAV && !isOGG) {
-          console.warn('⚠️ File may not have standard audio header, but continuing processing');
-          console.log('📊 File header:', fileHeader.toString('hex'));
-          // 不抛出错误，继续处理
-        } else {
-          console.log('✅ Valid audio file header detected');
-        }
-        
-        // 创建模拟的分离音轨（使用原始音频作为占位符）
-        // 如果原始文件是HTML，创建一个简单的音频文件
-        let stemBuffer = originalBuffer;
-        if (textContent.includes('<!doctype html>') || textContent.includes('<html')) {
-          console.warn('⚠️ Original file is HTML, creating dummy audio file for stem:', stemType);
-          // 创建一个简单的MP3文件头 + 静音数据
-          const dummyAudio = Buffer.concat([
-            Buffer.from([0xFF, 0xFB, 0x90, 0x00]), // MP3 header
-            Buffer.alloc(1000, 0) // 1KB of silence
-          ]);
-          stemBuffer = dummyAudio;
-        }
-        
-        const stemUploadResult = await uploadToCloudinary(stemBuffer, {
-          resource_type: 'raw', // 使用raw类型确保不进行转换
-          folder: 'stem-splitter/stems',
-          public_id: `${jobId}_${stemType}`,
-          quality: 'auto'
-        });
-        
-        console.log('📤 Stem upload result:', {
-          success: stemUploadResult.success,
-          publicId: stemUploadResult.data?.public_id,
-          secureUrl: stemUploadResult.data?.secure_url
-        });
+        console.log('✅ 原始音频文件下载成功，大小:', originalBuffer.length, 'bytes');
 
-        if (stemUploadResult.success) {
-          const { data: stemCloudinaryData } = stemUploadResult;
+        // 1. 上传到 GaudioLab
+        console.log('📤 上传到 GaudioLab...');
+        const uploadResult = await gaudioLab.uploadAudio(originalBuffer, 'audio.wav');
+        console.log('✅ GaudioLab 上传成功:', uploadResult.upload_id);
+        
+        // 更新进度
+        await supabase
+          .from('processing_jobs')
+          .update({ progress: 20 })
+          .eq('id', jobId);
 
-          // 保存分离音轨信息
+        // 2. 启动音乐分离
+        console.log('🎵 启动 GaudioLab 音乐分离...');
+        const separationResult = await gaudioLab.startMusicSeparation(uploadResult.upload_id, {
+          model: 'gsep_music_hq_v1',
+          stems: ['vocals', 'drums', 'bass', 'guitar', 'piano']
+        });
+        console.log('✅ GaudioLab 分离任务启动:', separationResult.job_id);
+        
+        // 更新进度
+        await supabase
+          .from('processing_jobs')
+          .update({ progress: 40 })
+          .eq('id', jobId);
+
+        // 3. 轮询处理状态
+        let completed = false;
+        let attempts = 0;
+        const maxAttempts = 60; // 最多等待5分钟
+        
+        while (!completed && attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, 5000)); // 等待5秒
+          attempts++;
+          
+          const status = await gaudioLab.getStatus(separationResult.job_id);
+          console.log(`📊 GaudioLab 处理状态 (${attempts}/${maxAttempts}):`, status.status);
+          
+          // 更新进度（40-90%）
+          const progress = Math.min(40 + (attempts * 2), 90);
           await supabase
-            .from('separated_stems')
-            .insert({
-              id: stemId,
-              job_id: jobId,
-              stem_type: stemType,
-              file_name: stemFileName,
-              file_size: audioFileData.file_size,
-              storage_path: stemCloudinaryData.public_id,
-              storage_url: stemCloudinaryData.secure_url,
-              cloudinary_public_id: stemCloudinaryData.public_id,
-              expires_at: audioFile.expires_at // 使用相同的过期时间
-            });
-
-          stemData.push({
-            [stemType]: stemCloudinaryData.secure_url
-          });
+            .from('processing_jobs')
+            .update({ progress })
+            .eq('id', jobId);
+          
+          if (status.status === 'completed') {
+            completed = true;
+            console.log('✅ GaudioLab 音频分离完成!');
+            
+            // 4. 下载分离结果
+            const stemTypes = ['vocals', 'drums', 'bass', 'guitar', 'piano'];
+            
+            for (const stemType of stemTypes) {
+              try {
+                console.log(`📥 下载 ${stemType} 音轨...`);
+                const stemBuffer = await gaudioLab.downloadStem(separationResult.job_id, stemType);
+                
+                // 5. 上传到 Cloudinary
+                console.log(`📤 上传 ${stemType} 到 Cloudinary...`);
+                const uploadResult = await uploadToCloudinary(stemBuffer, {
+                  resource_type: 'raw',
+                  folder: 'stem-splitter/stems',
+                  public_id: `${jobId}_${stemType}`,
+                  quality: 'auto'
+                });
+                
+                if (uploadResult.success) {
+                  // 6. 保存到数据库
+                  const stemId = uuidv4();
+                  await supabase
+                    .from('separated_stems')
+                    .insert({
+                      id: stemId,
+                      job_id: jobId,
+                      stem_type: stemType,
+                      file_name: `${stemType}.wav`,
+                      file_size: stemBuffer.length,
+                      storage_path: uploadResult.data.public_id,
+                      storage_url: uploadResult.data.secure_url,
+                      cloudinary_public_id: uploadResult.data.public_id,
+                      expires_at: audioFile.expires_at
+                    });
+                  
+                  console.log(`✅ ${stemType} 音轨处理完成`);
+                } else {
+                  console.error(`❌ ${stemType} 音轨上传失败:`, uploadResult.error);
+                }
+              } catch (stemError) {
+                console.error(`❌ ${stemType} 音轨处理失败:`, stemError.message);
+              }
+            }
+            
+            // 更新任务完成
+            await supabase
+              .from('processing_jobs')
+              .update({ 
+                status: 'completed',
+                progress: 100,
+                completed_at: new Date().toISOString()
+              })
+              .eq('id', jobId);
+            
+            console.log('🎉 所有音轨处理完成!');
+            
+          } else if (status.status === 'failed') {
+            throw new Error('GaudioLab 处理失败');
+          }
         }
+        
+        if (!completed) {
+          throw new Error('GaudioLab 处理超时');
+        }
+        
+      } catch (error) {
+        console.error('❌ GaudioLab 处理错误:', error);
+        
+        // 更新任务失败
+        await supabase
+          .from('processing_jobs')
+          .update({ 
+            status: 'failed',
+            error_message: error.message
+          })
+          .eq('id', jobId);
       }
-
-      // 更新任务完成
-      await supabase
-        .from('processing_jobs')
-        .update({ 
-          status: 'completed',
-          progress: 100,
-          completed_at: new Date().toISOString()
-        })
-        .eq('id', jobId);
-
     }, 1000);
 
     res.json({
