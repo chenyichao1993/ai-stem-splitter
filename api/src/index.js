@@ -5,7 +5,15 @@ const compression = require('compression');
 const { v4: uuidv4 } = require('uuid');
 const { supabase, BUCKET_NAME } = require('./config/supabase');
 const { uploadToCloudinary, deleteFromCloudinary } = require('./utils/cloudinary');
+const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
+
+// 配置Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
