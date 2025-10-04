@@ -272,10 +272,7 @@ app.post('/api/process', async (req, res) => {
           resource_type: 'auto',
           folder: 'stem-splitter/stems',
           public_id: `${jobId}_${stemType}`,
-          transformation: [
-            { effect: 'volume:0.8' }, // 稍微降低音量以模拟分离效果
-            { quality: 'auto' }
-          ]
+          quality: 'auto'
         });
 
         if (stemUploadResult.success) {
