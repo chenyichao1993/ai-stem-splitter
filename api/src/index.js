@@ -86,7 +86,7 @@ app.post('/api/upload', upload.single('audio'), async (req, res) => {
     
     // 上传到Cloudinary
     const uploadResult = await uploadToCloudinary(req.file.buffer, {
-      resource_type: 'auto',
+      resource_type: 'video', // 音频文件在Cloudinary中归类为video
       folder: 'stem-splitter/uploads',
       public_id: fileId
     });
@@ -283,7 +283,7 @@ app.post('/api/process', async (req, res) => {
         
         // 创建模拟的分离音轨（使用原始音频作为占位符）
         const stemUploadResult = await uploadToCloudinary(originalBuffer, {
-          resource_type: 'auto',
+          resource_type: 'video', // 音频文件在Cloudinary中归类为video
           folder: 'stem-splitter/stems',
           public_id: `${jobId}_${stemType}`,
           quality: 'auto'
