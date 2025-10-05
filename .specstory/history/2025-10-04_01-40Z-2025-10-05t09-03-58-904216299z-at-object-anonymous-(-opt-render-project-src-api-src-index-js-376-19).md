@@ -1772,6 +1772,45 @@ _**User (2025-10-05 12:43Z)**_
 
 _**Assistant**_
 
+看到构建失败了！问题是在 `HomeStemSplitter.tsx` 文件中有ESLint错误。让我快速修复这些问题：
+
+
+---
+
+Read file: undefined
+
+---
+
+Read file: undefined
+
+---
+
+我找到了问题！让我修复这些ESLint错误：
+
+
+---
+
+<details><summary>Edit file: components/landing/HomeStemSplitter.tsx</summary>
+
+undefined
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -394,5 +394,5 @@
+                  <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+-                     What You'll Get
++                     What You&apos;ll Get
+                </h3>
+                <div className="space-y-3">
+```
+
+</details>
+
+---
+
 
 
 ---
