@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const { supabase, BUCKET_NAME } = require('./config/supabase');
 const { uploadToCloudinary, deleteFromCloudinary } = require('./utils/cloudinary');
 const cloudinary = require('cloudinary').v2;
-const GaudioLabClient = require('./services/gaudiolab');
+const AudioSeparationClient = require('./services/gaudiolab');
 require('dotenv').config();
 
 // 配置Cloudinary
@@ -243,7 +243,7 @@ app.post('/api/process', async (req, res) => {
         console.log('🎵 开始 GaudioLab 真实音频分离...');
         
         // 初始化 GaudioLab 客户端
-        const gaudioLab = new GaudioLabClient();
+        const gaudioLab = new AudioSeparationClient();
         
         // 更新状态为处理中
         await supabase
