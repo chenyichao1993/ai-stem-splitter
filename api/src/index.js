@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const compression = require('compression');
+const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const { supabase, BUCKET_NAME } = require('./config/supabase');
 const { uploadToCloudinary, deleteFromCloudinary } = require('./utils/cloudinary');
@@ -20,6 +21,26 @@ const PORT = process.env.PORT || 10000;
 
 // 中间件
 app.use(compression());
+// 允许本地开发跨域访问
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // 允许本地端口和显式配置的站点
+      const allowed = [
+        /localhost:\d+$/, // 本地前端
+        process.env.NEXT_PUBLIC_SITE_ORIGIN || '',
+      ].filter(Boolean);
+      if (!origin) return callback(null, true);
+      if (allowed.some((rule) => (rule instanceof RegExp ? rule.test(origin) : rule === origin))) {
+        return callback(null, true);
+      }
+      return callback(null, true); // 放宽为允许，避免本地调试受阻
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+app.options('*', cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 

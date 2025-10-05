@@ -26,8 +26,8 @@ import { AudioPlayer } from '../stem-splitter/AudioPlayer'
 import { ProcessingStatus } from '../stem-splitter/ProcessingStatus'
 import toast from 'react-hot-toast'
 
-// API配置
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
+// API配置：优先环境变量，否则默认指向本地后端 10000 端口
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000/api'
 
 // Stem icons and colors
 const stemIcons = {
@@ -393,7 +393,7 @@ export function HomeStemSplitter() {
                 // Initial state - show features
                 <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    What You'll Get
+                    What You&apos;ll Get
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center">
@@ -554,7 +554,7 @@ export function HomeStemSplitter() {
                       <span className="text-sm text-gray-600">{uploadedFile.name}</span>
                     </div>
                     <div className="text-sm text-gray-500">
-                      Click "Separate Stems Now" to start processing
+                      Click &quot;Separate Stems Now&quot; to start processing
                     </div>
                   </div>
                 </div>
