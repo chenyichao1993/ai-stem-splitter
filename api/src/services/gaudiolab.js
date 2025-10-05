@@ -9,30 +9,45 @@ class GaudioLabClient {
 
   // 上传音频文件
   async uploadAudio(audioBuffer, fileName) {
-    try {
-      console.log('📤 上传音频文件到 GaudioLab...');
-      
-      const FormData = require('form-data');
-      const formData = new FormData();
-      formData.append('file', audioBuffer, {
-        filename: fileName,
-        contentType: 'audio/wav'
-      });
-      
-      const response = await axios.post(`${this.baseURL}/upload`, formData, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          ...formData.getHeaders()
-        },
-        timeout: 30000 // 30秒超时
-      });
-      
-      console.log('✅ GaudioLab 上传成功:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('❌ GaudioLab 上传失败:', error.response?.data || error.message);
-      throw new Error(`GaudioLab upload failed: ${error.response?.data?.message || error.message}`);
+    const maxRetries = 3;
+    let lastError;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`📤 上传音频文件到 GaudioLab... (尝试 ${attempt}/${maxRetries})`);
+        
+        const FormData = require('form-data');
+        const formData = new FormData();
+        formData.append('file', audioBuffer, {
+          filename: fileName,
+          contentType: 'audio/wav'
+        });
+        
+        const response = await axios.post(`${this.baseURL}/upload`, formData, {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            ...formData.getHeaders()
+          },
+          timeout: 120000, // 增加到 2 分钟超时
+          maxContentLength: 50 * 1024 * 1024, // 50MB 最大文件大小
+          maxBodyLength: 50 * 1024 * 1024
+        });
+        
+        console.log(`✅ GaudioLab 上传成功 (尝试 ${attempt}):`, response.data);
+        return response.data;
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ GaudioLab 上传失败 (尝试 ${attempt}):`, error.response?.data || error.message);
+        
+        if (attempt < maxRetries) {
+          const waitTime = attempt * 3000; // 3s, 6s, 9s
+          console.log(`⏳ 等待 ${waitTime}ms 后重试...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+      }
     }
+    
+    throw new Error(`GaudioLab upload failed after ${maxRetries} attempts: ${lastError.response?.data?.message || lastError.message}`);
   }
 
   // 启动音乐分离
@@ -49,7 +64,7 @@ class GaudioLabClient {
           'Authorization': `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json'
         },
-        timeout: 30000
+        timeout: 120000
       });
       
       console.log('✅ GaudioLab 分离任务启动:', response.data);
@@ -67,7 +82,7 @@ class GaudioLabClient {
         headers: {
           'Authorization': `Bearer ${this.apiKey}`
         },
-        timeout: 10000
+        timeout: 60000
       });
       
       return response.data;
@@ -87,7 +102,7 @@ class GaudioLabClient {
           'Authorization': `Bearer ${this.apiKey}`
         },
         responseType: 'arraybuffer',
-        timeout: 60000 // 60秒超时
+        timeout: 120000 // 2分钟超时
       });
       
       console.log(`✅ ${stemType} 音轨下载成功，大小: ${response.data.length} bytes`);
