@@ -373,6 +373,6 @@ app.listen(PORT, () => {
 });
 
 // 启动清理调度器
-const scheduler = require('./scripts/scheduler');
+const scheduler = require('../scripts/scheduler');
 console.log('🧹 Starting automatic cleanup scheduler...');
 scheduler.start();
