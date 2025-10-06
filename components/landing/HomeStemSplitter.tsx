@@ -26,8 +26,8 @@ import { AudioPlayer } from '../stem-splitter/AudioPlayer'
 import { ProcessingStatus } from '../stem-splitter/ProcessingStatus'
 import toast from 'react-hot-toast'
 
-// API配置：优先环境变量，否则默认指向本地后端 10000 端口
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000/api'
+// API配置：直接使用已部署的Render API
+const API_BASE_URL = 'https://ai-stem-splitter-fown.onrender.com/api'
 
 // Stem icons and colors
 const stemIcons = {
