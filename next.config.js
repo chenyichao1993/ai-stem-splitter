@@ -3,6 +3,15 @@ const nextConfig = {
   // 启用压缩
   compress: true,
   
+  // 排除API目录，避免Next.js尝试编译后端代码
+  webpack: (config) => {
+    config.externals = config.externals || [];
+    config.externals.push({
+      'api': 'commonjs api',
+    });
+    return config;
+  },
+  
   // 图片优化
   images: {
     domains: ['localhost', 'images.unsplash.com', 'res.cloudinary.com'],
