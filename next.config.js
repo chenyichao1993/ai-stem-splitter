@@ -5,9 +5,10 @@ const nextConfig = {
   
   // 排除API目录，避免Next.js尝试编译后端代码
   webpack: (config) => {
-    config.externals = config.externals || [];
-    config.externals.push({
-      'api': 'commonjs api',
+    config.module.rules.push({
+      test: /\.(ts|tsx|js|jsx)$/,
+      include: /api/,
+      use: 'ignore-loader'
     });
     return config;
   },
